@@ -13,6 +13,10 @@ async function get(path) {
   if (!res.ok) {
     throw new Error(`API error ${res.status}: ${res.statusText}`)
   }
+  const contentType = res.headers.get('content-type') || ''
+  if (!contentType.includes('application/json')) {
+    throw new Error('Backend server is not running on port 8000. Start backend using start_system.bat or python -m uvicorn main:app')
+  }
   return res.json()
 }
 
@@ -28,6 +32,10 @@ async function post(path, body = {}) {
   if (!res.ok) {
     const errorData = await res.json().catch(() => ({}))
     throw new Error(errorData.detail || `API error ${res.status}: ${res.statusText}`)
+  }
+  const contentType = res.headers.get('content-type') || ''
+  if (!contentType.includes('application/json')) {
+    throw new Error('Backend server is not running on port 8000. Start backend using start_system.bat or python -m uvicorn main:app')
   }
   return res.json()
 }

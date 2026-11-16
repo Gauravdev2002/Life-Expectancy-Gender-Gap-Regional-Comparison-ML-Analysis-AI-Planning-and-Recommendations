@@ -10,6 +10,7 @@ from fastapi import APIRouter
 router = APIRouter(prefix="/health", tags=["Health Check"])
 
 
+@router.get("")
 @router.get("/")
 async def health_check():
     """Returns a simple status message so the frontend can ping the backend."""

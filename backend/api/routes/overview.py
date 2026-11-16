@@ -14,6 +14,7 @@ from ml.clustering import run_kmeans_clustering
 router = APIRouter(prefix="/overview", tags=["Overview"])
 
 
+@router.get("")
 @router.get("/")
 async def get_overview():
     """
