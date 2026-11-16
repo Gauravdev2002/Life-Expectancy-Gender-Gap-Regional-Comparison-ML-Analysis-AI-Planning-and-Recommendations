@@ -1,0 +1,10 @@
+services:
+  # Option 1: Unified Docker Deployment (Recommended - Free Tier)
+  - type: web
+    name: health-intelligence-system
+    env: docker
+    plan: free
+    dockerfilePath: Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health/
+    autoDeploy: true

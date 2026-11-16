@@ -1,0 +1,36 @@
+/* src/index.css
+   Global styles – Tailwind directives + minor resets
+*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth scrollbar for the sidebar */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    @apply bg-surface text-text-primary font-sans;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Utility: active sidebar link highlight */
+@layer components {
+  .nav-link {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium
+           text-text-secondary hover:bg-blue-50 hover:text-primary
+           transition-colors duration-150 cursor-pointer;
+  }
+  .nav-link.active {
+    @apply bg-primary text-white hover:bg-primary-dark hover:text-white;
+  }
+  .card {
+    @apply bg-white rounded-xl border border-surface-border shadow-sm p-5;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+}

@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  health-intelligence-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: health_intelligence_system
+    ports:
+      - "8000:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
