@@ -108,22 +108,21 @@ def build_ml_feature_matrix(include_aggregates: bool = False) -> pd.DataFrame:
     return df
 
 
+_ML_CACHE: Dict[str, Any] = {}
+
+
 def run_kmeans_clustering(
     k: int = 3,
     include_aggregates: bool = False
 ) -> Dict[str, Any]:
     """
     Executes K-Means Clustering and PCA on Dataset S9.
-
-    Steps:
-      1. Builds the 9-dimensional numerical feature matrix.
-      2. Scales features using StandardScaler.
-      3. Fits K-Means for k=k (default 3), evaluates silhouette scores for k in [2..6].
-      4. Orders clusters logically from Lowest HLE to Highest HLE for intuitive interpretation.
-      5. Generates human-understandable cluster names and descriptions.
-      6. Applies PCA reducing to 2 components, calculating explained variance.
-      7. Returns formatted cluster profiles, PCA coordinate points, and evaluation metrics.
+    Uses in-memory cache to ensure instantaneous response times.
     """
+    cache_key = f"{k}_{include_aggregates}"
+    if cache_key in _ML_CACHE:
+        return _ML_CACHE[cache_key]
+
     df = build_ml_feature_matrix(include_aggregates=include_aggregates)
 
     if len(df) < k:
@@ -281,7 +280,7 @@ def run_kmeans_clustering(
             "pc2_loading": _safe_float(pca.components_[1, idx], 3),
         })
 
-    return {
+    res = {
         "k_clusters": k,
         "total_locations": len(df),
         "silhouette_score": _safe_float(sil_score, 4),
@@ -302,3 +301,5 @@ def run_kmeans_clustering(
             "direct medical or clinical causation."
         ),
     }
+    _ML_CACHE[cache_key] = res
+    return res

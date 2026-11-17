@@ -10,7 +10,7 @@ import useFetch from '../hooks/useFetch'
 import { fetchOverview } from '../services/api'
 
 export default function Overview() {
-  const { data, loading, error } = useFetch(fetchOverview)
+  const { data, loading, error } = useFetch(fetchOverview, 'overview_data')
 
   const kpis = data?.kpis || {}
 
@@ -25,22 +25,26 @@ export default function Overview() {
       {/* Backend connection status bar */}
       <div
         className={`p-3.5 rounded-lg flex items-center justify-between text-xs font-medium border ${
-          loading
-            ? 'bg-amber-50 border-amber-200 text-amber-800'
-            : error
+          error
             ? 'bg-red-50 border-red-200 text-red-800'
+            : loading && !data
+            ? 'bg-amber-50 border-amber-200 text-amber-800'
             : 'bg-green-50 border-green-200 text-green-800'
         }`}
       >
         <div className="flex items-center gap-2">
           <span
             className={`w-2.5 h-2.5 rounded-full ${
-              loading ? 'bg-amber-500 animate-pulse' : error ? 'bg-red-500' : 'bg-green-500'
+              error
+                ? 'bg-red-500'
+                : loading && !data
+                ? 'bg-amber-500 animate-pulse'
+                : 'bg-green-500'
             }`}
           />
-          {loading && 'Connecting to FastAPI backend & loading datasets…'}
-          {error && `Backend connection failed: ${error}. Ensure backend is running.`}
-          {data && (
+          {error && `Backend connection failed: ${error}. Ensure backend is running on port 8000.`}
+          {loading && !data && 'Initializing system connection & loading datasets…'}
+          {(data || (!loading && !error)) && (
             <span>
               <strong>System Online:</strong> FastAPI backend operational · 3 Excel datasets verified · All modules active.
             </span>

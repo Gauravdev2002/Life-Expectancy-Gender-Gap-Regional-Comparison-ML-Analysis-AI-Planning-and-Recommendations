@@ -13,13 +13,20 @@ from ml.clustering import run_kmeans_clustering
 
 router = APIRouter(prefix="/overview", tags=["Overview"])
 
+_OVERVIEW_CACHE = None
+
 
 @router.get("")
 @router.get("/")
 async def get_overview():
     """
     Returns high-level project info and live aggregated metrics from all modules.
+    Cached in-memory to ensure sub-millisecond response times.
     """
+    global _OVERVIEW_CACHE
+    if _OVERVIEW_CACHE is not None:
+        return _OVERVIEW_CACHE
+
     try:
         s9 = get_s9()
         total_locs = int(s9["location"].nunique())
@@ -46,7 +53,7 @@ async def get_overview():
         silhouette = ml_eval.get("silhouette_score", 0.384)
         pca_var = ml_eval.get("pca_explained_variance_ratio", {}).get("total_explained", 83.8)
 
-        return {
+        res = {
             "project": "AI-Based Regional Health Inequality and Life Expectancy Intelligence System",
             "phase": "Complete Integrated System",
             "status": "Operational & Fully Validated",
@@ -82,6 +89,8 @@ async def get_overview():
                 {"name": "Recommendations & Reports", "path": "/recommendations", "status": "Ready"},
             ],
         }
+        _OVERVIEW_CACHE = res
+        return res
     except Exception as e:
         return {
             "project": "AI-Based Regional Health Inequality and Life Expectancy Intelligence System",

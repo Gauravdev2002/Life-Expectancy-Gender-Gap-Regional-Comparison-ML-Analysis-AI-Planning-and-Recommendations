@@ -68,6 +68,21 @@ app.include_router(reports_router,  prefix="/api")   # /api/reports/
 app.include_router(integration_router, prefix="/api") # Phase 8 Canonical Integration Endpoints
 
 # ---------------------------------------------------------------------------
+# Pre-warm analytical and dataset caches on startup for zero-latency responses
+# ---------------------------------------------------------------------------
+@app.on_event("startup")
+async def startup_warmup():
+    try:
+        from data.pipeline import get_all_datasets
+        get_all_datasets()
+        from ml.clustering import run_kmeans_clustering
+        run_kmeans_clustering(k=3)
+        from api.routes.overview import get_overview
+        await get_overview()
+    except Exception as e:
+        print(f"Warmup notice: {e}")
+
+# ---------------------------------------------------------------------------
 # Static frontend serving (Optional unified full-stack deployment)
 # If frontend/dist is built, FastAPI serves both frontend and API from 1 service!
 # ---------------------------------------------------------------------------
