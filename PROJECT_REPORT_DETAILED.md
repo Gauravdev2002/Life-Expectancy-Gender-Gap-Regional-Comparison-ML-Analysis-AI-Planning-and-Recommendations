@@ -6,9 +6,9 @@
 **Department:** Department of Computer Science & Engineering, School of Engineering & Technology  
 **Academic Year:** 2026–2027  
 **Project Team Members:**
-- **Gaurav Yadav** (Roll No: 2026-CSE-042)
-- **Bal Krishna Shrivastav** (Roll No: 2026-CSE-038)
-- **Yash Kumar** (Roll No: 2026-CSE-061)
+- **Gaurav** (Roll No: 2024UCB6625)
+- **BalKrishna** (Roll No: 2024UCB6068)
+- **Yash Kumar** (Roll No: 2024UCB8025)
 
 **Project Supervisor / Guide:**
 - **Professor Prakash Rao**, Department of Computer Science & Engineering  

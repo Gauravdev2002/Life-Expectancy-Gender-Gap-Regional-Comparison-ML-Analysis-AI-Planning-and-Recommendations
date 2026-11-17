@@ -5,9 +5,9 @@ Compiles a publication-quality, 8-page College Academic Project Report in PDF fo
 complete with System Architecture Diagrams and Graphical Charts.
 
 Project Team:
-  - Gaurav Yadav
-  - Bal Krishna Shrivastav
-  - Yash Kumar
+  - Gaurav (2024UCB6625)
+  - BalKrishna (2024UCB6068)
+  - Yash Kumar (2024UCB8025)
 
 Project Guide:
   - Professor Prakash Rao
@@ -84,7 +84,7 @@ class NumberedCanvas(canvas.Canvas):
         self.drawRightString(letter[0] - 54, 30, page_str)
         self.drawString(
             54, 30,
-            "Dept. of Computer Science & Engineering · Team: G. Yadav, B. K. Shrivastav, Y. Kumar · Guide: Prof. Prakash Rao"
+            "Dept. of Computer Science & Engineering · Team: Gaurav, BalKrishna, Yash Kumar · Guide: Prof. Prakash Rao"
         )
         self.restoreState()
 
@@ -233,9 +233,9 @@ def build_pdf_report(output_filename="Health_Inequality_Intelligence_System_Proj
         [
             Paragraph(
                 "<b>Submitted By (Project Team):</b><br/><br/>"
-                "• <b>Gaurav Yadav</b> (Roll No: 2026-CSE-042)<br/>"
-                "• <b>Bal Krishna Shrivastav</b> (Roll No: 2026-CSE-038)<br/>"
-                "• <b>Yash Kumar</b> (Roll No: 2026-CSE-061)<br/><br/>"
+                "• <b>Gaurav</b> (Roll No: 2024UCB6625)<br/>"
+                "• <b>BalKrishna</b> (Roll No: 2024UCB6068)<br/>"
+                "• <b>Yash Kumar</b> (Roll No: 2024UCB8025)<br/><br/>"
                 "B.Tech Computer Science & Engineering",
                 ParagraphStyle('LeftMeta', parent=cover_meta_style, alignment=TA_LEFT)
             ),
@@ -267,7 +267,7 @@ def build_pdf_report(output_filename="Health_Inequality_Intelligence_System_Proj
     story.append(Paragraph("CERTIFICATE OF AUTHENTICITY", h1_style))
     story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=8, spaceBefore=2))
     story.append(Paragraph(
-        "This is to certify that the project entitled <b>'AI-Based Regional Health Inequality and Life Expectancy Intelligence System'</b> submitted by <b>Gaurav Yadav</b>, <b>Bal Krishna Shrivastav</b>, and <b>Yash Kumar</b> in partial fulfillment of the requirements for the award of the degree of <b>Bachelor of Technology in Computer Science & Engineering</b> is an authentic record of original project work carried out under my guidance and supervision.",
+        "This is to certify that the project entitled <b>'AI-Based Regional Health Inequality and Life Expectancy Intelligence System'</b> submitted by <b>Gaurav</b> (2024UCB6625), <b>BalKrishna</b> (2024UCB6068), and <b>Yash Kumar</b> (2024UCB8025) in partial fulfillment of the requirements for the award of the degree of <b>Bachelor of Technology in Computer Science & Engineering</b> is an authentic record of original project work carried out under my guidance and supervision.",
         body_style
     ))
     story.append(Paragraph(
@@ -296,9 +296,9 @@ def build_pdf_report(output_filename="Health_Inequality_Intelligence_System_Proj
 
     cand_table = Table([
         [
-            Paragraph("<b>Gaurav Yadav</b><br/>B.Tech CSE (2026-CSE-042)", ParagraphStyle('Cand1', parent=body_style, alignment=TA_LEFT)),
-            Paragraph("<b>Bal Krishna Shrivastav</b><br/>B.Tech CSE (2026-CSE-038)", ParagraphStyle('Cand2', parent=body_style, alignment=TA_CENTER)),
-            Paragraph("<b>Yash Kumar</b><br/>B.Tech CSE (2026-CSE-061)", ParagraphStyle('Cand3', parent=body_style, alignment=TA_RIGHT)),
+            Paragraph("<b>Gaurav</b><br/>2024UCB6625<br/>B.Tech CSE", ParagraphStyle('Cand1', parent=body_style, alignment=TA_LEFT)),
+            Paragraph("<b>BalKrishna</b><br/>2024UCB6068<br/>B.Tech CSE", ParagraphStyle('Cand2', parent=body_style, alignment=TA_CENTER)),
+            Paragraph("<b>Yash Kumar</b><br/>2024UCB8025<br/>B.Tech CSE", ParagraphStyle('Cand3', parent=body_style, alignment=TA_RIGHT)),
         ]
     ], colWidths=[175, 175, 150])
     story.append(cand_table)
