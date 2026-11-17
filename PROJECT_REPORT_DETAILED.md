@@ -2,10 +2,18 @@
 
 # AI-Based Regional Health Inequality and Life Expectancy Intelligence System
 
-**Degree:** Bachelor of Technology (B.Tech) / Bachelor of Computer Applications (BCA)  
-**Discipline:** Computer Science and Engineering / Artificial Intelligence & Data Science  
+**Degree:** Bachelor of Technology (B.Tech) in Computer Science & Engineering  
+**Department:** Department of Computer Science & Engineering, School of Engineering & Technology  
 **Academic Year:** 2026–2027  
-**Project Status:** 100% Operational, Verified & Validated  
+**Project Team Members:**
+- **Gaurav Yadav** (Roll No: 2026-CSE-042)
+- **Bal Krishna Shrivastav** (Roll No: 2026-CSE-038)
+- **Yash Kumar** (Roll No: 2026-CSE-061)
+
+**Project Supervisor / Guide:**
+- **Professor Prakash Rao**, Department of Computer Science & Engineering  
+
+**Project Status:** 100% Operational, Verified & Validated (50/50 Tests Passed)  
 
 ---
 

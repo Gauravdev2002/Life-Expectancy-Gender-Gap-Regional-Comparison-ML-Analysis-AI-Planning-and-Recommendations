@@ -1,19 +1,25 @@
 """
 generate_pdf_report.py
 ----------------------
-Compiles a publication-quality, college-ready Academic Project Report in PDF format
-using ReportLab for the "AI-Based Regional Health Inequality and Life Expectancy Intelligence System".
+Compiles a publication-quality, 8-page College Academic Project Report in PDF format
+for the "AI-Based Regional Health Inequality and Life Expectancy Intelligence System".
+
+Project Team:
+  - Gaurav Yadav
+  - Bal Krishna Shrivastav
+  - Yash Kumar
+
+Project Guide:
+  - Professor Prakash Rao
 """
 
 import os
 import sys
-from datetime import datetime
 
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
-from reportlab.lib.units import inch
 from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, KeepTogether, HRFlowable
+    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, HRFlowable
 )
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT, TA_JUSTIFY
@@ -22,8 +28,8 @@ from reportlab.pdfgen import canvas
 
 class NumberedCanvas(canvas.Canvas):
     """
-    Two-pass canvas to dynamically compute and print 'Page X of Y' 
-    and running headers on every page except the cover page.
+    Two-pass canvas that dynamically calculates and renders exact 'Page X of 8'
+    and running headers across all pages except the cover page.
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -43,64 +49,65 @@ class NumberedCanvas(canvas.Canvas):
 
     def draw_page_decorations(self, page_count):
         if self._pageNumber == 1:
-            # Suppress header and footer on cover page
-            return
+            return  # Suppress headers/footers on Cover Page
 
         self.saveState()
         self.setFont("Helvetica", 8)
-        self.setFillColor(colors.HexColor("#64748B"))
+        self.setFillColor(colors.HexColor("#475569"))
 
         # Running Top Header
         self.drawString(
-            54, letter[1] - 36,
+            54, letter[1] - 34,
             "AI-Based Regional Health Inequality & Life Expectancy Intelligence System"
         )
         self.drawRightString(
-            letter[0] - 54, letter[1] - 36,
-            "Major Project Report (B.Tech CSE)"
+            letter[0] - 54, letter[1] - 34,
+            "Major Project Report · B.Tech CSE"
         )
         self.setStrokeColor(colors.HexColor("#CBD5E1"))
         self.setLineWidth(0.6)
-        self.line(54, letter[1] - 42, letter[0] - 54, letter[1] - 42)
+        self.line(54, letter[1] - 39, letter[0] - 54, letter[1] - 39)
 
         # Running Bottom Footer
-        self.line(54, 46, letter[0] - 54, 46)
+        self.line(54, 42, letter[0] - 54, 42)
         page_str = f"Page {self._pageNumber} of {page_count}"
-        self.drawRightString(letter[0] - 54, 32, page_str)
+        self.drawRightString(letter[0] - 54, 30, page_str)
         self.drawString(
-            54, 32,
-            "Department of Computer Science & Engineering · Academic Year 2026–2027"
+            54, 30,
+            "Dept. of Computer Science & Engineering · Team: G. Yadav, B. K. Shrivastav, Y. Kumar · Guide: Prof. Prakash Rao"
         )
         self.restoreState()
 
 
 def build_pdf_report(output_filename="Health_Inequality_Intelligence_System_Project_Report.pdf"):
     pdf_path = os.path.abspath(output_filename)
+    
+    # 54pt (0.75 in) margins
     doc = SimpleDocTemplate(
         pdf_path,
         pagesize=letter,
         leftMargin=54,
         rightMargin=54,
-        topMargin=54,
-        bottomMargin=54
+        topMargin=48,
+        bottomMargin=48
     )
 
-    # Styles
     base_styles = getSampleStyleSheet()
 
-    # Custom Palette
+    # Color Palette
     c_primary = colors.HexColor("#1E3A8A")    # Deep Navy
     c_secondary = colors.HexColor("#2563EB")  # Royal Blue
     c_dark = colors.HexColor("#0F172A")       # Slate 900
     c_body = colors.HexColor("#334155")       # Slate 700
     c_accent = colors.HexColor("#0D9488")     # Teal
 
+    # Typography Styles
     title_style = ParagraphStyle(
         'CoverTitle',
         parent=base_styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=24,
-        leading=30,
+        fontSize=21,
+        leading=26,
         alignment=TA_CENTER,
         textColor=c_primary
     )
@@ -108,8 +115,8 @@ def build_pdf_report(output_filename="Health_Inequality_Intelligence_System_Proj
         'CoverSubtitle',
         parent=base_styles['Normal'],
         fontName='Helvetica',
-        fontSize=12,
-        leading=16,
+        fontSize=11,
+        leading=15,
         alignment=TA_CENTER,
         textColor=c_secondary
     )
@@ -117,8 +124,8 @@ def build_pdf_report(output_filename="Health_Inequality_Intelligence_System_Proj
         'CoverMeta',
         parent=base_styles['Normal'],
         fontName='Helvetica',
-        fontSize=10,
-        leading=15,
+        fontSize=9.5,
+        leading=14,
         alignment=TA_CENTER,
         textColor=c_dark
     )
@@ -126,47 +133,47 @@ def build_pdf_report(output_filename="Health_Inequality_Intelligence_System_Proj
         'ChapHeading',
         parent=base_styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=16,
-        leading=20,
+        fontSize=13.5,
+        leading=17,
         textColor=c_primary,
-        spaceBefore=12,
-        spaceAfter=8,
+        spaceBefore=0,
+        spaceAfter=4,
         keepWithNext=True
     )
     h2_style = ParagraphStyle(
         'SecHeading',
         parent=base_styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=12,
-        leading=16,
+        fontSize=10.5,
+        leading=13.5,
         textColor=c_secondary,
-        spaceBefore=10,
-        spaceAfter=4,
+        spaceBefore=5,
+        spaceAfter=2,
         keepWithNext=True
     )
     body_style = ParagraphStyle(
         'BodyTextCustom',
         parent=base_styles['Normal'],
         fontName='Helvetica',
-        fontSize=9.5,
-        leading=14,
+        fontSize=8.5,
+        leading=11.5,
         alignment=TA_JUSTIFY,
         textColor=c_body,
-        spaceAfter=6
+        spaceAfter=4
     )
     bullet_style = ParagraphStyle(
         'BulletCustom',
         parent=body_style,
-        leftIndent=14,
-        firstLineIndent=-10,
-        spaceAfter=3
+        leftIndent=12,
+        firstLineIndent=-8,
+        spaceAfter=2
     )
     table_cell = ParagraphStyle(
         'TableCell',
         parent=base_styles['Normal'],
         fontName='Helvetica',
-        fontSize=8.5,
-        leading=11,
+        fontSize=7.8,
+        leading=10,
         textColor=c_dark
     )
     table_cell_bold = ParagraphStyle(
@@ -175,516 +182,427 @@ def build_pdf_report(output_filename="Health_Inequality_Intelligence_System_Proj
         fontName='Helvetica-Bold',
         textColor=colors.white
     )
-    quote_style = ParagraphStyle(
-        'QuoteBlock',
-        parent=body_style,
-        fontName='Helvetica-Oblique',
-        leftIndent=18,
-        rightIndent=18,
-        textColor=colors.HexColor("#475569")
-    )
 
     story = []
 
     # =========================================================================
-    # COVER PAGE
+    # PAGE 1: COVER PAGE
     # =========================================================================
-    story.append(Spacer(1, 40))
-    story.append(Paragraph("A MAJOR PROJECT REPORT ON", ParagraphStyle('SubSub', parent=subtitle_style, fontSize=11, textColor=colors.HexColor("#64748B"))))
-    story.append(Spacer(1, 15))
+    story.append(Spacer(1, 20))
+    story.append(Paragraph("A MAJOR PROJECT REPORT ON", ParagraphStyle('SubSub', parent=subtitle_style, fontSize=11, fontName='Helvetica-Bold', textColor=colors.HexColor("#64748B"))))
+    story.append(Spacer(1, 10))
     story.append(Paragraph("AI-BASED REGIONAL HEALTH INEQUALITY AND LIFE EXPECTANCY INTELLIGENCE SYSTEM", title_style))
-    story.append(Spacer(1, 12))
-    story.append(HRFlowable(width="60%", thickness=2, color=c_secondary, spaceAfter=15, spaceBefore=0))
-    story.append(Paragraph("An Automated Public Health Analytics Platform Integrating Global Burden of Disease Empirical Data, Scikit-Learn Unsupervised Clustering, and HTN / STRIPS AI Planning Calculus", subtitle_style))
+    story.append(Spacer(1, 10))
+    story.append(HRFlowable(width="65%", thickness=2, color=c_secondary, spaceAfter=12, spaceBefore=0))
+    story.append(Paragraph("An Automated Health Analytics Platform Integrating Global Burden of Disease Empirical Data, Scikit-Learn Unsupervised Clustering, and HTN / STRIPS AI Planning Calculus", subtitle_style))
 
-    story.append(Spacer(1, 70))
+    story.append(Spacer(1, 45))
 
-    meta_table_data = [
-        [
-            Paragraph("<b>Submitted In Partial Fulfillment of Requirements for</b><br/>Bachelor of Technology (B.Tech)<br/>in Computer Science & Engineering", cover_meta_style)
-        ]
-    ]
-    meta_table = Table(meta_table_data, colWidths=[500])
+    meta_table = Table([
+        [Paragraph("<b>Submitted In Partial Fulfillment of Requirements for the Award of the Degree of</b><br/><b>BACHELOR OF TECHNOLOGY</b><br/>IN<br/><b>COMPUTER SCIENCE & ENGINEERING</b>", cover_meta_style)]
+    ], colWidths=[500])
     meta_table.setStyle(TableStyle([
         ('ALIGN', (0,0), (-1,-1), 'CENTER'),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
     ]))
     story.append(meta_table)
 
-    story.append(Spacer(1, 60))
+    story.append(Spacer(1, 45))
 
-    student_guide_table_data = [
+    team_guide_data = [
         [
-            Paragraph("<b>Submitted By:</b><br/><b>Gaurav Yadav</b><br/>B.Tech Computer Science & Engineering<br/>University Roll No: 2026-CSE-042", ParagraphStyle('LeftMeta', parent=cover_meta_style, alignment=TA_LEFT)),
-            Paragraph("<b>Under the Guidance of:</b><br/><b>Department Faculty Advisor</b><br/>Department of Computer Science & Engineering<br/>Academic Session: 2026–2027", ParagraphStyle('RightMeta', parent=cover_meta_style, alignment=TA_RIGHT)),
+            Paragraph(
+                "<b>Submitted By (Project Team):</b><br/><br/>"
+                "• <b>Gaurav Yadav</b> (Roll No: 2026-CSE-042)<br/>"
+                "• <b>Bal Krishna Shrivastav</b> (Roll No: 2026-CSE-038)<br/>"
+                "• <b>Yash Kumar</b> (Roll No: 2026-CSE-061)<br/><br/>"
+                "B.Tech Computer Science & Engineering",
+                ParagraphStyle('LeftMeta', parent=cover_meta_style, alignment=TA_LEFT)
+            ),
+            Paragraph(
+                "<b>Under the Supervision of:</b><br/><br/>"
+                "<b>Professor Prakash Rao</b><br/>"
+                "Department of Computer Science & Engineering<br/>"
+                "School of Engineering & Technology<br/><br/>"
+                "Academic Session: 2026–2027",
+                ParagraphStyle('RightMeta', parent=cover_meta_style, alignment=TA_RIGHT)
+            ),
         ]
     ]
-    student_guide_table = Table(student_guide_table_data, colWidths=[250, 250])
-    student_guide_table.setStyle(TableStyle([
+    team_guide_table = Table(team_guide_data, colWidths=[260, 240])
+    team_guide_table.setStyle(TableStyle([
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ('LINELEFT', (1,0), (1,-1), 1, colors.HexColor("#E2E8F0")),
+        ('LEFTPADDING', (1,0), (1,-1), 15),
     ]))
-    story.append(student_guide_table)
+    story.append(team_guide_table)
 
     story.append(Spacer(1, 50))
-    story.append(Paragraph("Department of Computer Science & Engineering<br/>School of Engineering & Technology<br/>November 2026", cover_meta_style))
+    story.append(Paragraph("<b>DEPARTMENT OF COMPUTER SCIENCE & ENGINEERING</b><br/>School of Engineering & Technology<br/>Academic Session 2026–2027", cover_meta_style))
     story.append(PageBreak())
 
     # =========================================================================
-    # CERTIFICATE & DECLARATION
+    # PAGE 2: CERTIFICATE OF AUTHENTICITY & CANDIDATE DECLARATION
     # =========================================================================
     story.append(Paragraph("CERTIFICATE OF AUTHENTICITY", h1_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=15, spaceBefore=2))
+    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=8, spaceBefore=2))
     story.append(Paragraph(
-        "This is to certify that the project entitled <b>'AI-Based Regional Health Inequality and Life Expectancy Intelligence System'</b> submitted by <b>Gaurav Yadav</b> in partial fulfillment of the requirements for the award of the degree of <b>Bachelor of Technology in Computer Science & Engineering</b> is an authentic record of independent research and engineering carried out by him under supervision.",
+        "This is to certify that the project entitled <b>'AI-Based Regional Health Inequality and Life Expectancy Intelligence System'</b> submitted by <b>Gaurav Yadav</b>, <b>Bal Krishna Shrivastav</b>, and <b>Yash Kumar</b> in partial fulfillment of the requirements for the award of the degree of <b>Bachelor of Technology in Computer Science & Engineering</b> is an authentic record of original project work carried out under my guidance and supervision.",
         body_style
     ))
     story.append(Paragraph(
-        "The results, calculations, statistical algorithms, machine learning models, and automated planning routines embodied in this project report have been verified against original empirical datasets from the Global Burden of Disease (GBD) Study and have not been submitted elsewhere for the award of any other degree or diploma.",
+        "The mathematical computations, data science pipelines, Scikit-learn machine learning algorithms, and automated HTN / STRIPS planning architectures embodied in this report have been verified against original empirical records from the Global Burden of Disease (GBD) Study and have not been submitted elsewhere for any other degree or diploma.",
         body_style
     ))
-    story.append(Spacer(1, 40))
+    story.append(Spacer(1, 25))
 
-    sig_data = [
+    cert_sig_table = Table([
         [
-            Paragraph("<b>Project Supervisor</b><br/>Assistant Professor, Dept. of CSE", ParagraphStyle('SigL', parent=body_style, alignment=TA_LEFT)),
-            Paragraph("<b>Head of Department</b><br/>Department of Computer Science & Engineering", ParagraphStyle('SigR', parent=body_style, alignment=TA_RIGHT))
+            Paragraph("<b>Professor Prakash Rao</b><br/>Project Supervisor / Guide<br/>Dept. of Computer Science & Engg.", ParagraphStyle('Sig1', parent=body_style, alignment=TA_LEFT)),
+            Paragraph("<b>Head of Department</b><br/>Dept. of Computer Science & Engg.<br/>School of Engineering & Technology", ParagraphStyle('Sig2', parent=body_style, alignment=TA_CENTER)),
+            Paragraph("<b>External Examiner</b><br/>Board of Examiners<br/>University Evaluation Committee", ParagraphStyle('Sig3', parent=body_style, alignment=TA_RIGHT)),
         ]
-    ]
-    sig_table = Table(sig_data, colWidths=[250, 250])
-    story.append(sig_table)
+    ], colWidths=[175, 175, 150])
+    story.append(cert_sig_table)
 
-    story.append(Spacer(1, 40))
+    story.append(Spacer(1, 20))
     story.append(Paragraph("CANDIDATE DECLARATION", h1_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=15, spaceBefore=2))
+    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=8, spaceBefore=2))
     story.append(Paragraph(
-        "I hereby declare that the project work presented in this report is the outcome of my own original investigation and system implementation. All sources of empirical health datasets (GBD Study 2023), open-source algorithms, and software development libraries have been duly acknowledged. No fabricated or simulated data points were introduced into the analytical pipeline.",
+        "We hereby declare that the project entitled <b>'AI-Based Regional Health Inequality and Life Expectancy Intelligence System'</b> is an outcome of our own collaborative technical development. All sources of empirical health datasets (GBD Study 2023), theoretical paradigms (STRIPS Action Representation, HTN Planning), algorithms, and software libraries (FastAPI, React 18, Scikit-learn) have been appropriately referenced. No fabricated, artificial, or synthetic data records were used.",
         body_style
     ))
-    story.append(Spacer(1, 30))
-    cand_sig = Table([
-        [Paragraph("", body_style), Paragraph("<b>Gaurav Yadav</b><br/>B.Tech CSE, 7th/8th Semester", ParagraphStyle('CandSig', parent=body_style, alignment=TA_RIGHT))]
-    ], colWidths=[250, 250])
-    story.append(cand_sig)
+    story.append(Spacer(1, 20))
+
+    cand_table = Table([
+        [
+            Paragraph("<b>Gaurav Yadav</b><br/>B.Tech CSE (2026-CSE-042)", ParagraphStyle('Cand1', parent=body_style, alignment=TA_LEFT)),
+            Paragraph("<b>Bal Krishna Shrivastav</b><br/>B.Tech CSE (2026-CSE-038)", ParagraphStyle('Cand2', parent=body_style, alignment=TA_CENTER)),
+            Paragraph("<b>Yash Kumar</b><br/>B.Tech CSE (2026-CSE-061)", ParagraphStyle('Cand3', parent=body_style, alignment=TA_RIGHT)),
+        ]
+    ], colWidths=[175, 175, 150])
+    story.append(cand_table)
+
+    story.append(Spacer(1, 15))
+    story.append(Paragraph("<b>Place:</b> University Campus &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Date:</b> November 17, 2026", body_style))
     story.append(PageBreak())
 
     # =========================================================================
-    # ABSTRACT & EXECUTIVE SUMMARY
+    # PAGE 3: EXECUTIVE SUMMARY & CHAPTER 1: INTRODUCTION
     # =========================================================================
-    story.append(Paragraph("ABSTRACT & EXECUTIVE SUMMARY", h1_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=15, spaceBefore=2))
+    story.append(Paragraph("EXECUTIVE SUMMARY", h1_style))
+    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=6, spaceBefore=2))
     story.append(Paragraph(
-        "Global health disparities remain among the most consequential challenges in contemporary public health and epidemiological policy. While aggregate life expectancy metrics are frequently cited, they fail to account for morbidity-free survival, regional developmental divides, and sex-specific longevity gaps. This project presents the design, mathematical formulation, and full-stack software implementation of the <b>AI-Based Regional Health Inequality and Life Expectancy Intelligence System</b>.",
+        "Global health disparities represent a multifaceted challenge in epidemiological surveillance and healthcare resource allocation. While traditional life expectancy estimates total survival duration, it fails to quantify morbidity-free survival or capture regional developmental divergence. This project delivers an end-to-end full-stack intelligence system leveraging <b>8,532 official empirical records across 705 global territories from the Global Burden of Disease (GBD) 2023 Study</b>. Built with a reactive React 18 frontend, a Python 3.14 / FastAPI backend, Scikit-learn unsupervised clustering ($k=3$, Silhouette: 0.3842), and classical HTN / STRIPS AI planning, the platform enforces 95% uncertainty interval preservation and avoids ecological fallacies while operating at 100% test-verified stability.",
         body_style
     ))
-    story.append(Paragraph(
-        "Built on official empirical records from the Global Burden of Disease (GBD) 2023 Study—encompassing <b>8,532 records across 705 global locations spanning 1990 to 2023</b>—the system establishes a rigorous, end-to-end intelligence platform that adheres strictly to epidemiological standards: preserving 95% uncertainty intervals, preventing ecological fallacies through separate handling of global cause-level datasets (S10/S11), and eliminating synthetic data.",
-        body_style
-    ))
-    story.append(Paragraph(
-        "The core analytical components comprise: (1) <b>Longitudinal Healthy Life Expectancy (HLE) Analytics</b> across 1990, 2010, 2020, and 2023; (2) <b>Sex-Disaggregated Gender Gap Analysis</b> examining female-to-male longevity divergence (varying globally from +7.9 years in Ukraine to -3.0 years in Balochistan); (3) <b>Cross-Regional and Socio-Demographic Index (SDI) Disparity Modeling</b> establishing an 11.0-year developmental gradient between High and Low SDI quintiles; (4) <b>Unsupervised Machine Learning</b> utilizing StandardScaler normalization, K-Means clustering ($k=3$, Silhouette Score: 0.3842), and 2D Principal Component Analysis (PCA explaining 83.8% cumulative variance); and (5) <b>Classical AI Automated Planning</b> implementing Hierarchical Task Network (HTN) compound goal decomposition and STRIPS state-transition calculus with verified resolution of the Frame Problem.",
-        body_style
-    ))
-    story.append(Paragraph(
-        "The system is deployed via a reactive React 18 / Tailwind CSS / Recharts frontend communicating with a high-throughput Python 3.14 / FastAPI backend. A comprehensive 50-test verification suite confirms 100% mathematical and architectural compliance with zero defects.",
-        body_style
-    ))
-    story.append(Spacer(1, 10))
-    story.append(Paragraph("<b>Keywords:</b> Healthy Life Expectancy (HLE), Health Inequality, Global Burden of Disease (GBD), K-Means Clustering, Principal Component Analysis, STRIPS Action Representation, Hierarchical Task Networks (HTN), FastAPI, React.", body_style))
-    story.append(PageBreak())
+    story.append(Spacer(1, 4))
 
-    # =========================================================================
-    # TABLE OF CONTENTS
-    # =========================================================================
-    story.append(Paragraph("TABLE OF CONTENTS", h1_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=15, spaceBefore=2))
-
-    toc_data = [
-        [Paragraph("<b>Chapter</b>", table_cell_bold), Paragraph("<b>Title</b>", table_cell_bold), Paragraph("<b>Page</b>", table_cell_bold)],
-        [Paragraph("—", table_cell), Paragraph("Certificate of Authenticity & Declaration", table_cell), Paragraph("ii", table_cell)],
-        [Paragraph("—", table_cell), Paragraph("Abstract & Executive Summary", table_cell), Paragraph("iii", table_cell)],
-        [Paragraph("<b>Chapter 1</b>", table_cell), Paragraph("<b>Introduction, Motivation & Problem Statement</b>", table_cell), Paragraph("1", table_cell)],
-        [Paragraph("<b>Chapter 2</b>", table_cell), Paragraph("<b>Dataset Characteristics, Cleaning & Schema Pipeline</b>", table_cell), Paragraph("3", table_cell)],
-        [Paragraph("<b>Chapter 3</b>", table_cell), Paragraph("<b>Healthy Life Expectancy & Regional Disparity Analytics</b>", table_cell), Paragraph("6", table_cell)],
-        [Paragraph("<b>Chapter 4</b>", table_cell), Paragraph("<b>Machine Learning: K-Means Clustering & 2D PCA</b>", table_cell), Paragraph("9", table_cell)],
-        [Paragraph("<b>Chapter 5</b>", table_cell), Paragraph("<b>Automated AI Planning: HTN & STRIPS Calculus</b>", table_cell), Paragraph("12", table_cell)],
-        [Paragraph("<b>Chapter 6</b>", table_cell), Paragraph("<b>System Architecture & Full-Stack Implementation</b>", table_cell), Paragraph("15", table_cell)],
-        [Paragraph("<b>Chapter 7</b>", table_cell), Paragraph("<b>Verification, Software Testing & Quality Assurance</b>", table_cell), Paragraph("18", table_cell)],
-        [Paragraph("<b>Chapter 8</b>", table_cell), Paragraph("<b>Conclusion, Limitations & Future Scope</b>", table_cell), Paragraph("20", table_cell)],
-        [Paragraph("<b>Appendix A</b>", table_cell), Paragraph("<b>Viva Voce Defense Questions & Comprehensive Answers</b>", table_cell), Paragraph("22", table_cell)],
-    ]
-    toc_table = Table(toc_data, colWidths=[70, 370, 60])
-    toc_table.setStyle(TableStyle([
-        ('BACKGROUND', (0,0), (-1,0), c_primary),
-        ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#E2E8F0")),
-        ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor("#F8FAFC")]),
-        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('TOPPADDING', (0,0), (-1,-1), 5),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 5),
-    ]))
-    story.append(toc_table)
-    story.append(PageBreak())
-
-    # =========================================================================
-    # CHAPTER 1: INTRODUCTION
-    # =========================================================================
     story.append(Paragraph("CHAPTER 1: INTRODUCTION & PROBLEM STATEMENT", h1_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=12, spaceBefore=2))
+    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=6, spaceBefore=2))
 
-    story.append(Paragraph("1.1 Background & Public Health Context", h2_style))
+    story.append(Paragraph("1.1 Background: Healthy Life Expectancy vs Overall Life Expectancy", h2_style))
     story.append(Paragraph(
-        "Throughout the twentieth and early twenty-first centuries, public health monitoring predominantly focused on standard overall life expectancy at birth (LE). However, dramatic reductions in infant mortality and improvements in acute infection survival have generated a profound demographic transition: populations are surviving longer, yet frequently living with chronic, non-communicable diseases and disabling sequelae. Consequently, the metric of <b>Healthy Life Expectancy (HLE)</b>—representing the average number of years a person can expect to live in 'full health' without serious disease or impairment—has emerged as the definitive epidemiological gold standard.",
+        "While <b>Life Expectancy at Birth (LE)</b> measures the total average years an individual can expect to live, modern demographic transitions have led to extended survival alongside chronic disease and disability. Consequently, <b>Healthy Life Expectancy (HLE)</b>—estimating the expected years lived in full health without debilitating impairment—has emerged as the definitive epidemiological metric for assessing population well-being and health system performance.",
         body_style
     ))
 
-    story.append(Paragraph("1.2 The Problem Statement", h2_style))
+    story.append(Paragraph("1.2 The Problem Statement & Technical Challenges", h2_style))
     story.append(Paragraph(
-        "Despite the availability of vast datasets compiled by the Institute for Health Metrics and Evaluation (IHME) Global Burden of Disease (GBD) studies, health policymakers, researchers, and academic institutions face three critical operational obstacles:",
+        "Modern health data intelligence systems face three significant operational and methodological hurdles:",
         body_style
     ))
-    story.append(Paragraph("• <b>High Data Sparsity & Structural Complexity:</b> Raw epidemiological datasets feature multi-tier hierarchical headers, merged cells, uncertainty bounds, and footnotes that impede conventional analytical consumption.", bullet_style))
-    story.append(Paragraph("• <b>Risk of Ecological Fallacies:</b> Unsubstantiated merging of country-level longevity tables with aggregate global cause-of-death registries introduces severe statistical distortions and invalid causal assertions.", bullet_style))
-    story.append(Paragraph("• <b>Absence of Autonomous Analytical Intelligence:</b> Traditional static business intelligence dashboards lack automated task planning, state-dependent analytical decomposition, and unsupervised grouping capabilities.", bullet_style))
+    story.append(Paragraph("• <b>Structural Complexity & Missing Value Dynamics:</b> Official epidemiological tables feature multi-row merged headers, uncertainty bounds, and regional hierarchy tiers that hinder automated software ingestion.", bullet_style))
+    story.append(Paragraph("• <b>Risk of Ecological Fallacies:</b> Naively merging macro-level global disease burden metrics (such as global DALY/YLD registries) directly into territorial country-level rows generates distorted, scientifically invalid causal conclusions.", bullet_style))
+    story.append(Paragraph("• <b>Lack of Autonomous Analytical Planning:</b> Standard business dashboards execute rigid, hardcoded procedures rather than dynamically structuring analytical steps based on specific research objectives.", bullet_style))
 
-    story.append(Paragraph("1.3 Project Scope and Key Objectives", h2_style))
-    story.append(Paragraph(
-        "The objective of this project is to build an explainable, end-to-end software intelligence system that ingests cleaned GBD datasets, models health disparities, applies machine learning clustering, dynamically generates analytical workflows through automated AI planning, and presents interactive insights via a responsive web dashboard.",
-        body_style
-    ))
+    story.append(Paragraph("1.3 Project Scope & Core Contributions", h2_style))
+    story.append(Paragraph("1. <b>Empirical Data Integrity:</b> Strict sanitization and ingestion of GBD Datasets S9, S10, and S11 with preserved 95% uncertainty intervals.", bullet_style))
+    story.append(Paragraph("2. <b>Disparity & Gender Modeling:</b> Sex-stratified longevity differentials and Socio-Demographic Index (SDI) gradient analysis.", bullet_style))
+    story.append(Paragraph("3. <b>Unsupervised ML Clustering:</b> Standardized K-Means clustering and 2D Principal Component Analysis (PCA) capturing 83.8% variance.", bullet_style))
+    story.append(Paragraph("4. <b>Autonomous AI Planning:</b> Dynamic HTN goal decomposition and formal STRIPS state transitions resolving the classical Frame Problem.", bullet_style))
     story.append(PageBreak())
 
     # =========================================================================
-    # CHAPTER 2: DATASETS & PREPROCESSING
+    # PAGE 4: CHAPTER 2: DATASETS & EMPIRICAL HLE ANALYTICS
     # =========================================================================
-    story.append(Paragraph("CHAPTER 2: DATASET CHARACTERISTICS & PREPROCESSING", h1_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=12, spaceBefore=2))
+    story.append(Paragraph("CHAPTER 2: DATASET PROFILES & LONGITUDINAL HLE ANALYTICS", h1_style))
+    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=6, spaceBefore=2))
 
-    story.append(Paragraph("2.1 Empirical Dataset Profiles", h2_style))
+    story.append(Paragraph("2.1 Empirical Dataset Schema & Data Pipeline", h2_style))
     story.append(Paragraph(
-        "The system integrates three primary datasets from the official Global Burden of Disease 2023 Study publications:",
+        "The system integrates three official datasets from the Global Burden of Disease (GBD) Study (Institute for Health Metrics & Evaluation):",
         body_style
     ))
 
-    ds_table_data = [
-        [Paragraph("<b>Dataset ID</b>", table_cell_bold), Paragraph("<b>Dataset Scope</b>", table_cell_bold), Paragraph("<b>Record Count</b>", table_cell_bold), Paragraph("<b>Key Variables Extracted</b>", table_cell_bold)],
-        [Paragraph("<b>Dataset S9</b>", table_cell), Paragraph("Healthy Life Expectancy by Location and Sex", table_cell), Paragraph("8,532 rows (705 unique locations)", table_cell), Paragraph("Location, Sex, HLE Mean (1990–2023), 95% UI, % Change 2010–2023", table_cell)],
-        [Paragraph("<b>Dataset S10</b>", table_cell), Paragraph("Global DALY Counts & Age-Standardized Rates", table_cell), Paragraph("376 rows (Levels 0–4 cause hierarchy)", table_cell), Paragraph("Cause Name, Metric, 1990/2010/2020/2023 DALYs, % Change", table_cell)],
-        [Paragraph("<b>Dataset S11</b>", table_cell), Paragraph("Global YLD Counts & Age-Standardized Rates", table_cell), Paragraph("371 rows (Levels 0–4 cause hierarchy)", table_cell), Paragraph("Cause Name, Metric, 1990/2010/2020/2023 YLDs, % Change", table_cell)],
-    ]
-    ds_table = Table(ds_table_data, colWidths=[70, 160, 110, 160])
+    ds_table = Table([
+        [Paragraph("<b>Dataset</b>", table_cell_bold), Paragraph("<b>Scope & Granularity</b>", table_cell_bold), Paragraph("<b>Records / Scope</b>", table_cell_bold), Paragraph("<b>Key Variables Extracted</b>", table_cell_bold)],
+        [Paragraph("<b>Dataset S9</b>", table_cell), Paragraph("Location-Disaggregated HLE", table_cell), Paragraph("8,532 rows (705 unique locations)", table_cell), Paragraph("Location, Sex, Year (1990–2023), HLE Mean, 95% UI, % Change", table_cell)],
+        [Paragraph("<b>Dataset S10</b>", table_cell), Paragraph("Global DALY Burden (Cause Hierarchy)", table_cell), Paragraph("376 rows (Levels 0–4 Causes)", table_cell), Paragraph("Cause Name, Count/ASR, 1990–2023 DALYs, % Change 2010–2023", table_cell)],
+        [Paragraph("<b>Dataset S11</b>", table_cell), Paragraph("Global YLD Burden (Cause Hierarchy)", table_cell), Paragraph("371 rows (Levels 0–4 Causes)", table_cell), Paragraph("Cause Name, Count/ASR, 1990–2023 YLDs, % Change 2010–2023", table_cell)],
+    ], colWidths=[65, 140, 115, 180])
     ds_table.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), c_primary),
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#CBD5E1")),
         ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor("#F8FAFC")]),
-        ('TOPPADDING', (0,0), (-1,-1), 4),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+        ('TOPPADDING', (0,0), (-1,-1), 2.5),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 2.5),
     ]))
     story.append(ds_table)
-    story.append(Spacer(1, 10))
+    story.append(Spacer(1, 4))
 
-    story.append(Paragraph("2.2 Data Cleaning & Rigorous Preprocessing Protocol", h2_style))
+    story.append(Paragraph("2.2 Longitudinal Global HLE Trajectory (1990–2023)", h2_style))
     story.append(Paragraph(
-        "A multi-stage cleaning pipeline (`backend/data/cleaner.py`) was engineered with four mandatory guardrails:",
-        body_style
-    ))
-    story.append(Paragraph("1. <b>Footnote & Asterisk Sanitization:</b> Removal of trailing citation annotations (e.g. `*`, `**`) to allow clean string matching across ISO geopolitical registries.", bullet_style))
-    story.append(Paragraph("2. <b>Uncertainty Interval Preservation:</b> All metrics retain lower and upper 95% uncertainty interval (UI) bounds. For instance, Global HLE in 2023 is preserved as 63.1 years with [60.2, 65.6] UI.", bullet_style))
-    story.append(Paragraph("3. <b>Strict Dataset Separation (No Ecological Fallacy):</b> S10 (DALYs) and S11 (YLDs) represent global aggregate burdens. The pipeline strictly prohibits joining these global causes to location-specific S9 records, eliminating fallacious causal attribution.", bullet_style))
-    story.append(Paragraph("4. <b>Explicit Missing-Data Tracking:</b> Values missing in historical spans (e.g. newly established administrative territories) are explicitly isolated rather than arbitrarily imputed with zero.", bullet_style))
-    story.append(PageBreak())
-
-    # =========================================================================
-    # CHAPTER 3: ANALYTICS & FINDINGS
-    # =========================================================================
-    story.append(Paragraph("CHAPTER 3: HEALTHY LIFE EXPECTANCY & REGIONAL DISPARITY ANALYTICS", h1_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=12, spaceBefore=2))
-
-    story.append(Paragraph("3.1 Longitudinal Global HLE Trajectory", h2_style))
-    story.append(Paragraph(
-        "The empirical S9 dataset records consistent progression in global healthy longevity over the 33-year evaluation period (1990–2023):",
+        "Empirical analysis reveals consistent global healthy lifespan gains over 33 years, though annual velocity has moderated recently:",
         body_style
     ))
 
-    hle_trend_table_data = [
-        [Paragraph("<b>Observation Year</b>", table_cell_bold), Paragraph("<b>Global HLE (Years)</b>", table_cell_bold), Paragraph("<b>95% Uncertainty Bounds</b>", table_cell_bold), Paragraph("<b>Period Delta</b>", table_cell_bold)],
-        [Paragraph("1990", table_cell), Paragraph("55.9 yrs", table_cell), Paragraph("[53.2 – 58.4] yrs", table_cell), Paragraph("Baseline Year", table_cell)],
-        [Paragraph("2010", table_cell), Paragraph("61.1 yrs", table_cell), Paragraph("[58.3 – 63.7] yrs", table_cell), Paragraph("+5.2 yrs (+9.3%)", table_cell)],
-        [Paragraph("2020", table_cell), Paragraph("62.6 yrs", table_cell), Paragraph("[59.8 – 65.1] yrs", table_cell), Paragraph("+1.5 yrs (+2.5%)", table_cell)],
-        [Paragraph("2023", table_cell), Paragraph("63.1 yrs", table_cell), Paragraph("[60.2 – 65.6] yrs", table_cell), Paragraph("+0.5 yrs (+0.8%)", table_cell)],
-    ]
-    hle_trend_table = Table(hle_trend_table_data, colWidths=[120, 120, 130, 130])
+    hle_trend_table = Table([
+        [Paragraph("<b>Observation Year</b>", table_cell_bold), Paragraph("<b>Global HLE (Years)</b>", table_cell_bold), Paragraph("<b>95% Uncertainty Interval</b>", table_cell_bold), Paragraph("<b>Longitudinal Progress Note</b>", table_cell_bold)],
+        [Paragraph("1990", table_cell), Paragraph("55.9 yrs", table_cell), Paragraph("[53.2 – 58.4] yrs", table_cell), Paragraph("Historical Baseline (Infectious burden prominent)", table_cell)],
+        [Paragraph("2010", table_cell), Paragraph("61.1 yrs", table_cell), Paragraph("[58.3 – 63.7] yrs", table_cell), Paragraph("+5.2 yrs (+9.3%) rapid child survival improvements", table_cell)],
+        [Paragraph("2020", table_cell), Paragraph("62.6 yrs", table_cell), Paragraph("[59.8 – 65.1] yrs", table_cell), Paragraph("+1.5 yrs (+2.5%) adult non-communicable disease impact", table_cell)],
+        [Paragraph("2023", table_cell), Paragraph("63.1 yrs", table_cell), Paragraph("[60.2 – 65.6] yrs", table_cell), Paragraph("+0.5 yrs (+0.8%) post-pandemic recovery stabilization", table_cell)],
+    ], colWidths=[90, 110, 130, 170])
     hle_trend_table.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), c_primary),
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#CBD5E1")),
         ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor("#F8FAFC")]),
-        ('TOPPADDING', (0,0), (-1,-1), 4),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+        ('TOPPADDING', (0,0), (-1,-1), 2.5),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 2.5),
     ]))
     story.append(hle_trend_table)
-    story.append(Spacer(1, 10))
+    story.append(Spacer(1, 4))
 
-    story.append(Paragraph("3.2 Sex-Disaggregated Longevity & The Gender Gap", h2_style))
+    story.append(Paragraph("2.3 Sex-Stratified Longevity & Gender Gap Analysis", h2_style))
     story.append(Paragraph(
-        "Gender-stratified analysis confirms a persistent biological and behavioral longevity advantage for females globally. In 2023, Global Female HLE reached <b>64.2 years</b> compared to <b>62.2 years</b> for males, yielding an empirical global gender gap of <b>+2.0 years</b> ($Ratio = 1.032$).",
+        "The gender gap is computed as: $\\text{Gender Gap} = \\text{Female HLE} - \\text{Male HLE}$. In 2023, Global Female HLE reached <b>64.2 years</b> versus <b>62.2 years</b> for males, yielding an empirical global advantage of <b>+2.0 years</b> ($Ratio = 1.032$).",
         body_style
     ))
     story.append(Paragraph(
-        "However, disaggregation across individual locations reveals dramatic geographic divergence: the female advantage expands to <b>+7.9 years in Ukraine</b> and <b>+7.7 years in the Russian Federation</b> (driven heavily by male cardiovascular mortality and external injuries), whereas in certain regions such as <b>Balochistan (-3.0 years)</b> and <b>Afghanistan (-0.9 years)</b>, the gap is inverted due to maternal health vulnerabilities and structural disadvantages.",
-        body_style
-    ))
-
-    story.append(Paragraph("3.3 Socio-Demographic Index (SDI) Gradients", h2_style))
-    story.append(Paragraph(
-        "Stratification across the five official Socio-Demographic Index quintiles demonstrates a steep developmental gradient: <b>High SDI locations average 67.9 years HLE</b>, compared to <b>56.9 years in Low SDI locations</b>—constituting an absolute health gap of <b>11.0 years</b>.",
+        "Geographic disaggregation reveals extreme global divergence: the female advantage is widest in Eastern Europe—led by <b>Ukraine (+7.9 yrs)</b> and the <b>Russian Federation (+7.7 yrs)</b>, driven by high male cardiovascular mortality and external injuries. Conversely, the gap inverts in regions with acute maternal and structural vulnerability, such as <b>Balochistan (-3.0 yrs)</b> and <b>Afghanistan (-0.9 yrs)</b>.",
         body_style
     ))
     story.append(PageBreak())
 
     # =========================================================================
-    # CHAPTER 4: MACHINE LEARNING ANALYSIS
+    # PAGE 5: CHAPTER 3: REGIONAL DISPARITIES & MACHINE LEARNING
     # =========================================================================
-    story.append(Paragraph("CHAPTER 4: MACHINE LEARNING: K-MEANS CLUSTERING & 2D PCA", h1_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=12, spaceBefore=2))
+    story.append(Paragraph("CHAPTER 3: REGIONAL DISPARITIES & MACHINE LEARNING ANALYSIS", h1_style))
+    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=6, spaceBefore=2))
 
-    story.append(Paragraph("4.1 Feature Selection & Mathematical Standardization", h2_style))
+    story.append(Paragraph("3.1 Socio-Demographic Index (SDI) Gradients", h2_style))
     story.append(Paragraph(
-        "To group global territories by longitudinal health inequality characteristics without supervised bias, an unsupervised pipeline was implemented using Scikit-learn (`backend/ml/clustering.py`). Four continuous numerical features were curated from Dataset S9:",
-        body_style
-    ))
-    story.append(Paragraph("1. $X_1$: Healthy Life Expectancy in 2023 (Both Sexes)", bullet_style))
-    story.append(Paragraph("2. $X_2$: Long-Term Absolute HLE Progress from 1990 to 2023 ($\Delta HLE_{1990-2023}$)", bullet_style))
-    story.append(Paragraph("3. $X_3$: Gender Longevity Gap in 2023 ($HLE_{female} - HLE_{male}$)", bullet_style))
-    story.append(Paragraph("4. $X_4$: Recent Percentage Rate of Change between 2010 and 2023 (% Change)", bullet_style))
-    story.append(Paragraph(
-        "Because raw features differ in units (years vs percentage rates), <b>StandardScaler</b> normalization was applied: $z = \\frac{x - \\mu}{\\sigma}$, ensuring zero-mean unit-variance scaling and preventing high-magnitude features from dominating Euclidean distance calculations.",
+        "Stratification across the five official Socio-Demographic Index quintiles reveals an acute <b>11.0-year developmental divide</b> between <b>High SDI (67.9 yrs)</b> and <b>Low SDI (56.9 yrs)</b>. High-middle (64.2 yrs), Middle (61.8 yrs), and Low-middle (58.4 yrs) exhibit stepwise progression, confirming that health inequality is structurally coupled to economic, educational, and fertility development.",
         body_style
     ))
 
-    story.append(Paragraph("4.2 K-Means Clustering & Silhouette Validation", h2_style))
+    story.append(Paragraph("3.2 Feature Engineering & StandardScaler Normalization", h2_style))
     story.append(Paragraph(
-        "Cluster evaluation across candidate values $k \\in [2, 6]$ identified $k=3$ as the optimal balance between cluster compactness, inter-cluster separation, and clinical interpretability, achieving a <b>Silhouette Score of 0.3842</b> across 699 valid locations.",
+        "To group global territories by health trajectories without supervised bias, four features were engineered from Dataset S9: (1) $X_1$: 2023 HLE, (2) $X_2$: Long-Term Progress (1990–2023 delta), (3) $X_3$: Gender Longevity Gap in 2023, and (4) $X_4$: 2010–2023 Percentage Change. Features were normalized using <b>StandardScaler</b>: $z = \\frac{x - \\mu}{\\sigma}$, preventing scale distortions in Euclidean distance calculations.",
         body_style
     ))
 
-    cl_table_data = [
-        [Paragraph("<b>Cluster ID</b>", table_cell_bold), Paragraph("<b>Archetype Classification</b>", table_cell_bold), Paragraph("<b>Location Count</b>", table_cell_bold), Paragraph("<b>Mean HLE (2023)</b>", table_cell_bold), Paragraph("<b>Archetypal Locations</b>", table_cell_bold)],
-        [Paragraph("<b>Cluster 0</b>", table_cell), Paragraph("High-Development Resilient", table_cell), Paragraph("308 (44.1%)", table_cell), Paragraph("67.4 yrs", table_cell), Paragraph("Japan, Singapore, Western Europe, High SDI", table_cell)],
-        [Paragraph("<b>Cluster 1</b>", table_cell), Paragraph("Transitional Double Burden", table_cell), Paragraph("287 (41.1%)", table_cell), Paragraph("62.5 yrs", table_cell), Paragraph("India, Brazil, Southeast Asia, Middle SDI", table_cell)],
-        [Paragraph("<b>Cluster 2</b>", table_cell), Paragraph("Low-Development High-Vulnerability", table_cell), Paragraph("104 (14.9%)", table_cell), Paragraph("53.1 yrs", table_cell), Paragraph("Central African Rep., Chad, Low SDI", table_cell)],
-    ]
-    cl_table = Table(cl_table_data, colWidths=[65, 140, 75, 75, 145])
+    story.append(Paragraph("3.3 K-Means Clustering & Silhouette Validation", h2_style))
+    story.append(Paragraph(
+        "Evaluation across $k \\in [2, 6]$ proved $k=3$ optimal, achieving a <b>Silhouette Score of 0.3842</b> across 699 valid locations:",
+        body_style
+    ))
+
+    cl_table = Table([
+        [Paragraph("<b>Cluster</b>", table_cell_bold), Paragraph("<b>Archetype Classification</b>", table_cell_bold), Paragraph("<b>Count (%)</b>", table_cell_bold), Paragraph("<b>Mean HLE</b>", table_cell_bold), Paragraph("<b>Key Characteristics & Exemplar Territories</b>", table_cell_bold)],
+        [Paragraph("<b>Cluster 0</b>", table_cell), Paragraph("High-Development Resilient", table_cell), Paragraph("308 (44.1%)", table_cell), Paragraph("67.4 yrs", table_cell), Paragraph("Advanced infrastructure, high female gap. Japan, Singapore, Western Europe.", table_cell)],
+        [Paragraph("<b>Cluster 1</b>", table_cell), Paragraph("Transitional Double Burden", table_cell), Paragraph("287 (41.1%)", table_cell), Paragraph("62.5 yrs", table_cell), Paragraph("Rapid historical gain, shifting disease burden. India, Brazil, SE Asia.", table_cell)],
+        [Paragraph("<b>Cluster 2</b>", table_cell), Paragraph("Low-Development High-Vulnerability", table_cell), Paragraph("104 (14.9%)", table_cell), Paragraph("53.1 yrs", table_cell), Paragraph("High infectious burden, low HLE. Central African Rep., Chad, Sahel.", table_cell)],
+    ], colWidths=[55, 130, 65, 60, 190])
     cl_table.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), c_primary),
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#CBD5E1")),
         ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor("#F8FAFC")]),
-        ('TOPPADDING', (0,0), (-1,-1), 4),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+        ('TOPPADDING', (0,0), (-1,-1), 2.5),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 2.5),
     ]))
     story.append(cl_table)
-    story.append(Spacer(1, 10))
+    story.append(Spacer(1, 4))
 
-    story.append(Paragraph("4.3 Principal Component Analysis (PCA) Dimensionality Reduction", h2_style))
+    story.append(Paragraph("3.4 2D Principal Component Analysis (PCA) Projection", h2_style))
     story.append(Paragraph(
-        "To enable visual verification of high-dimensional cluster partitions, PCA was applied to project the 4-dimensional standardized feature space into 2 orthogonal principal components:",
+        "To project 4-dimensional standardized vectors into an interpretable 2D Cartesian plane, PCA calculated the orthogonal eigenvectors:",
         body_style
     ))
     story.append(Paragraph("• <b>PC1 (Overall Longevity & Development Vector):</b> Captures <b>69.7%</b> of total variance.", bullet_style))
-    story.append(Paragraph("• <b>PC2 (Gender Divergence & Longitudinal Trajectory Vector):</b> Captures <b>14.1%</b> of total variance.", bullet_style))
-    story.append(Paragraph("• <b>Cumulative 2D Explained Variance:</b> <b>83.8%</b>, confirming that 2D scatter coordinates preserve the vast majority of mathematical information.", bullet_style))
+    story.append(Paragraph("• <b>PC2 (Gender Differential & Progress Trajectory Vector):</b> Captures <b>14.1%</b> of total variance.", bullet_style))
+    story.append(Paragraph("• <b>Cumulative 2D Explained Variance:</b> <b>83.8%</b>, confirming that 2D scatter plots faithfully retain the true mathematical topology.", bullet_style))
     story.append(PageBreak())
 
     # =========================================================================
-    # CHAPTER 5: AI PLANNING
+    # PAGE 6: CHAPTER 4: AUTOMATED AI PLANNING (HTN & STRIPS)
     # =========================================================================
-    story.append(Paragraph("CHAPTER 5: AUTOMATED AI PLANNING: HTN & STRIPS CALCULUS", h1_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=12, spaceBefore=2))
+    story.append(Paragraph("CHAPTER 4: AUTOMATED AI PLANNING: HTN & STRIPS CALCULUS", h1_style))
+    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=6, spaceBefore=2))
 
-    story.append(Paragraph("5.1 Theoretical Foundation: Autonomous Analytical Orchestration", h2_style))
+    story.append(Paragraph("4.1 Classical AI Planning Formalism", h2_style))
     story.append(Paragraph(
-        "A cornerstone engineering contribution of this system is replacing rigid, hardcoded analytics scripts with a formal <b>Classical AI Planning Engine</b>. The planner accepts high-level analytical objectives from users, decomposes them into ordered sub-tasks via <b>Hierarchical Task Networks (HTN)</b>, and executes primitive actions via formal <b>STRIPS state-transition calculus</b>.",
+        "Instead of hardcoding analytics execution, the system implements an autonomous <b>Classical AI Planning Engine</b>. The engine receives a compound user goal, applies <b>Hierarchical Task Network (HTN)</b> decomposition rules, and executes primitive actions via formal <b>STRIPS state-transition calculus</b>.",
         body_style
     ))
 
-    story.append(Paragraph("5.2 STRIPS Action Formalism & State Transitions", h2_style))
+    story.append(Paragraph("4.2 STRIPS Action Representation & Precondition Verification", h2_style))
     story.append(Paragraph(
-        "Each primitive action $a$ is defined as a 3-tuple: $\\langle Pre(a), Add(a), Del(a) \\rangle$. State transitions follow the deterministic update rule: $S_{t+1} = (S_t \\setminus Del(a)) \\cup Add(a)$, provided $Pre(a) \\subseteq S_t$.",
+        "Every atomic action $a$ is defined as a 3-tuple: $\\langle Pre(a), Add(a), Del(a) \\rangle$. Action $a$ can only execute when $Pre(a) \\subseteq S_t$:",
         body_style
     ))
 
-    strips_table_data = [
-        [Paragraph("<b>Primitive Action</b>", table_cell_bold), Paragraph("<b>Preconditions Required</b>", table_cell_bold), Paragraph("<b>Add Effects</b>", table_cell_bold), Paragraph("<b>Delete Effects</b>", table_cell_bold)],
+    strips_table = Table([
+        [Paragraph("<b>Primitive Action</b>", table_cell_bold), Paragraph("<b>Preconditions Required</b>", table_cell_bold), Paragraph("<b>Add Effects Asserted</b>", table_cell_bold), Paragraph("<b>Delete Effects</b>", table_cell_bold)],
         [Paragraph("LOAD_DATASET", table_cell), Paragraph("DATASET_AVAILABLE", table_cell), Paragraph("DATA_LOADED", table_cell), Paragraph("—", table_cell)],
-        [Paragraph("CLEAN_DATA", table_cell), Paragraph("DATA_LOADED", table_cell), Paragraph("DATA_CLEANED", table_cell), Paragraph("DATA_LOADED", table_cell)],
+        [Paragraph("CLEAN_DATA", table_cell), Paragraph("DATA_LOADED", table_cell), Paragraph("DATA_CLEANED", table_cell), Paragraph("—", table_cell)],
         [Paragraph("ANALYZE_HLE", table_cell), Paragraph("DATA_CLEANED", table_cell), Paragraph("HLE_ANALYSIS_COMPLETED", table_cell), Paragraph("—", table_cell)],
-        [Paragraph("ANALYZE_GENDER", table_cell), Paragraph("DATA_CLEANED", table_cell), Paragraph("GENDER_ANALYSIS_COMPLETED", table_cell), Paragraph("—", table_cell)],
+        [Paragraph("COMPUTE_GENDER_DIFF", table_cell), Paragraph("DATA_CLEANED", table_cell), Paragraph("GENDER_GAP_COMPUTED", table_cell), Paragraph("—", table_cell)],
         [Paragraph("RUN_CLUSTERING", table_cell), Paragraph("DATA_CLEANED", table_cell), Paragraph("CLUSTERS_GENERATED", table_cell), Paragraph("—", table_cell)],
-        [Paragraph("GENERATE_REPORT", table_cell), Paragraph("HLE_ANALYSIS_COMPLETED, CLUSTERS_GENERATED", table_cell), Paragraph("REPORT_GENERATED", table_cell), Paragraph("—", table_cell)],
-    ]
-    strips_table = Table(strips_table_data, colWidths=[110, 150, 150, 90])
+        [Paragraph("GENERATE_REPORT", table_cell), Paragraph("DATA_CLEANED", table_cell), Paragraph("REPORT_GENERATED", table_cell), Paragraph("—", table_cell)],
+    ], colWidths=[115, 125, 160, 100])
     strips_table.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), c_primary),
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#CBD5E1")),
         ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor("#F8FAFC")]),
-        ('TOPPADDING', (0,0), (-1,-1), 4),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+        ('TOPPADDING', (0,0), (-1,-1), 2.5),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 2.5),
     ]))
     story.append(strips_table)
-    story.append(Spacer(1, 10))
+    story.append(Spacer(1, 4))
 
-    story.append(Paragraph("5.3 Explicit Resolution of the Classical Frame Problem", h2_style))
+    story.append(Paragraph("4.3 Resolution of the Classical Frame Problem", h2_style))
     story.append(Paragraph(
-        "In artificial intelligence, the <i>Frame Problem</i> concerns representing what remains unchanged when an action occurs. The system solves this via the <b>STRIPS Assumption</b>: any predicate fact $p \\in S_t$ not explicitly listed in $Del(a)$ persists into $S_{t+1}$. For example, completing `ANALYZE_HLE` asserts `HLE_ANALYSIS_COMPLETED` without inadvertently dropping `DATA_CLEANED`.",
+        "The Frame Problem addresses how an AI system knows which world facts remain unchanged following an action. The system implements the formal <b>STRIPS Assumption</b>: $S_{t+1} = (S_t \\setminus Del(a)) \\cup Add(a)$. Facts not explicitly listed in $Del(a)$ automatically persist into $S_{t+1}$. For instance, asserting `CLUSTERS_GENERATED` does not delete `DATA_CLEANED`.",
         body_style
     ))
 
-    story.append(Paragraph("5.4 HTN Task Decomposition Across User Goals", h2_style))
-    story.append(Paragraph(
-        "The HTN decomposer (`backend/planning/htn.py`) supports 5 distinct compound goals, generating customized, non-identical execution workflows depending on whether the investigator requests inequality discovery, regional benchmarking, or gender disparity analysis.",
-        body_style
-    ))
+    story.append(Paragraph("4.4 Goal-Driven HTN Task Decompositions", h2_style))
+    story.append(Paragraph("Crucially, different user goals trigger distinct, tailored task decomposition sequences:", body_style))
+
+    htn_goals_table = Table([
+        [Paragraph("<b>User Goal ID</b>", table_cell_bold), Paragraph("<b>Compound Task Goal</b>", table_cell_bold), Paragraph("<b>Decomposed Primitive Action Sequence</b>", table_cell_bold)],
+        [Paragraph("ANALYZE_HEALTH_INEQUALITY", table_cell), Paragraph("Inequality & Clustering", table_cell), Paragraph("LOAD_DATASET → CLEAN_DATA → ANALYZE_HLE → RUN_CLUSTERING → GENERATE_REPORT", table_cell)],
+        [Paragraph("ANALYZE_GENDER_GAP", table_cell), Paragraph("Gender Disparity Analysis", table_cell), Paragraph("LOAD_DATASET → CLEAN_DATA → COMPUTE_GENDER_DIFF → GENERATE_REPORT", table_cell)],
+        [Paragraph("COMPARE_REGIONAL_HLE", table_cell), Paragraph("SDI & Regional Benchmarking", table_cell), Paragraph("LOAD_DATASET → CLEAN_DATA → COMPARE_REGIONS → GENERATE_REPORT", table_cell)],
+        [Paragraph("IDENTIFY_LOW_HLE", table_cell), Paragraph("Territorial Vulnerabilities", table_cell), Paragraph("LOAD_DATASET → CLEAN_DATA → RANK_LOCATIONS → IDENTIFY_VULNERABILITIES", table_cell)],
+    ], colWidths=[130, 130, 240])
+    htn_goals_table.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), c_primary),
+        ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#CBD5E1")),
+        ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor("#F8FAFC")]),
+        ('TOPPADDING', (0,0), (-1,-1), 2.5),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 2.5),
+    ]))
+    story.append(htn_goals_table)
     story.append(PageBreak())
 
     # =========================================================================
-    # CHAPTER 6: ARCHITECTURE & IMPLEMENTATION
+    # PAGE 7: CHAPTER 5: SYSTEM ARCHITECTURE & MASTER VERIFICATION SUITE
     # =========================================================================
-    story.append(Paragraph("CHAPTER 6: SYSTEM ARCHITECTURE & FULL-STACK IMPLEMENTATION", h1_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=12, spaceBefore=2))
+    story.append(Paragraph("CHAPTER 5: SYSTEM ARCHITECTURE & QUALITY ASSURANCE", h1_style))
+    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=6, spaceBefore=2))
 
-    story.append(Paragraph("6.1 Tiered Architectural Blueprint", h2_style))
+    story.append(Paragraph("5.1 3-Tier System Architecture", h2_style))
     story.append(Paragraph(
-        "The system follows a decoupled, three-tier modular architecture designed for high scalability, type safety, and real-time user interactivity:",
+        "The system follows a modular, three-tier architectural paradigm: (1) <b>Presentation Tier:</b> React 18, Vite, Tailwind CSS, Recharts for responsive dashboards; (2) <b>Application Tier:</b> Python 3.14, FastAPI, Uvicorn, Pandas, Scikit-learn, HTN/STRIPS planners; (3) <b>Data Tier:</b> Cleaned Excel records (`datasets/S9`, `S10`, `S11`) maintained with zero in-place mutations.",
         body_style
     ))
-    story.append(Paragraph("• <b>Tier 1 — Presentation Layer (Frontend):</b> Single Page Application built on React 18, Vite, Tailwind CSS, and Recharts. Includes dedicated interactive dashboards for Overview, Life Expectancy, Gender Gap, Regional Comparison, ML Analysis, Disease Burden, AI Planning, and Recommendations.", bullet_style))
-    story.append(Paragraph("• <b>Tier 2 — Application & Planning Layer (Backend):</b> High-performance asynchronous API engine powered by FastAPI (Python 3.14) and Uvicorn. Implements in-memory dataset caching, Pydantic data schemas, STRIPS/HTN execution engines, and Scikit-learn pipelines.", bullet_style))
-    story.append(Paragraph("• <b>Tier 3 — Data & Storage Layer:</b> Raw and sanitized Excel repositories (`datasets/S9`, `S10`, `S11`) maintained with strict isolation and zero persistent mutation of empirical files.", bullet_style))
 
-    story.append(Paragraph("6.2 Canonical REST API Endpoints", h2_style))
+    story.append(Paragraph("5.2 Canonical REST API Endpoints", h2_style))
     story.append(Paragraph("The backend exposes 11 canonical REST endpoints serving the entire analytical platform:", body_style))
 
-    api_table_data = [
-        [Paragraph("<b>HTTP Method & Route</b>", table_cell_bold), Paragraph("<b>Target Analytical Module</b>", table_cell_bold), Paragraph("<b>Output Schema / Key Payloads</b>", table_cell_bold)],
-        [Paragraph("GET /api/metadata", table_cell), Paragraph("System Registry", table_cell), Paragraph("Location count (705), year span (1990–2023), sexes", table_cell)],
-        [Paragraph("GET /api/analyze/hle", table_cell), Paragraph("HLE Empirical Engine", table_cell), Paragraph("Location trajectory, 95% UI, % change, top/bottom ranks", table_cell)],
-        [Paragraph("GET /api/analyze/gender-gap", table_cell), Paragraph("Gender Gap Analytics", table_cell), Paragraph("Female vs male HLE, gap span, parity ratio, scatter points", table_cell)],
+    api_table = Table([
+        [Paragraph("<b>HTTP Method & Route</b>", table_cell_bold), Paragraph("<b>Target Analytical Module</b>", table_cell_bold), Paragraph("<b>Key Output Payloads</b>", table_cell_bold)],
+        [Paragraph("GET /api/metadata", table_cell), Paragraph("System Registry", table_cell), Paragraph("705 locations, year span (1990–2023), sex categories", table_cell)],
+        [Paragraph("GET /api/analyze/hle", table_cell), Paragraph("Empirical HLE Engine", table_cell), Paragraph("Location trajectory, 95% UI, % change, top/bottom ranks", table_cell)],
+        [Paragraph("GET /api/analyze/gender-gap", table_cell), Paragraph("Gender Gap Analytics", table_cell), Paragraph("Female-Male differentials, parity ratios, scatter vectors", table_cell)],
         [Paragraph("GET /api/analyze/regional-comparison", table_cell), Paragraph("Regional Disparities", table_cell), Paragraph("SDI quintile comparisons, Super-Region aggregates", table_cell)],
         [Paragraph("GET /api/ml/clusters", table_cell), Paragraph("K-Means & PCA Engine", table_cell), Paragraph("Cluster labels, Silhouette score (0.3842), 2D PCA coordinates", table_cell)],
         [Paragraph("POST /api/plan", table_cell), Paragraph("AI Planning Engine", table_cell), Paragraph("HTN task decomposition, STRIPS state execution log", table_cell)],
         [Paragraph("GET /api/recommendations", table_cell), Paragraph("Surveillance Engine", table_cell), Paragraph("Rule-based public health flags across 4 heuristic rules", table_cell)],
-    ]
-    api_table = Table(api_table_data, colWidths=[150, 140, 210])
+    ], colWidths=[150, 140, 210])
     api_table.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), c_primary),
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#CBD5E1")),
         ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor("#F8FAFC")]),
-        ('TOPPADDING', (0,0), (-1,-1), 4),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+        ('TOPPADDING', (0,0), (-1,-1), 2.5),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 2.5),
     ]))
     story.append(api_table)
-    story.append(PageBreak())
+    story.append(Spacer(1, 4))
 
-    # =========================================================================
-    # CHAPTER 7: TESTING & RESULTS
-    # =========================================================================
-    story.append(Paragraph("CHAPTER 7: SOFTWARE TESTING, VERIFICATION & RESULTS", h1_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=12, spaceBefore=2))
-
-    story.append(Paragraph("7.1 Master Verification Test Suite (`test_master_suite.py`)", h2_style))
+    story.append(Paragraph("5.3 Master Test Suite Verification (50/50 Tests Passed, 100%)", h2_style))
     story.append(Paragraph(
-        "To ensure uncompromising scientific rigor and software quality, an automated end-to-end master test suite comprising <b>50 independent tests across 12 functional sections</b> was engineered. The entire suite executed in <b>36.32 seconds with a 100% pass rate (50/50 Passed, 0 Failed)</b>.",
+        "A 50-test verification suite (`backend/test_master_suite.py`) executed across 12 functional sections in <b>36.32 seconds with a 100% pass rate</b>:",
         body_style
     ))
 
-    test_res_data = [
-        [Paragraph("<b>Test Section</b>", table_cell_bold), Paragraph("<b>Verification Objective</b>", table_cell_bold), Paragraph("<b>Test Cases</b>", table_cell_bold), Paragraph("<b>Status</b>", table_cell_bold)],
-        [Paragraph("1. Excel Dataset Loading", table_cell), Paragraph("Raw multi-row headers, S9, S10, S11 file integrity", table_cell), Paragraph("4 Tests", table_cell), Paragraph("<b>100% PASS</b>", table_cell)],
-        [Paragraph("2. Data Cleaning & Validation", table_cell), Paragraph("Footnote stripping, UI retention, demographic isolation", table_cell), Paragraph("7 Tests", table_cell), Paragraph("<b>100% PASS</b>", table_cell)],
-        [Paragraph("3. Empirical HLE Calculations", table_cell), Paragraph("Validation against original Excel: 1990, 2010, 2020, 2023", table_cell), Paragraph("7 Tests", table_cell), Paragraph("<b>100% PASS</b>", table_cell)],
-        [Paragraph("4. Gender Gap Disparities", table_cell), Paragraph("Female-Male deltas, Ukraine max (+7.9y), Balochistan min", table_cell), Paragraph("6 Tests", table_cell), Paragraph("<b>100% PASS</b>", table_cell)],
-        [Paragraph("5. Regional & SDI Analytics", table_cell), Paragraph("High vs Low SDI 11.0-year span, Super-Region trends", table_cell), Paragraph("3 Tests", table_cell), Paragraph("<b>100% PASS</b>", table_cell)],
-        [Paragraph("6. K-Means Clustering", table_cell), Paragraph("3 clusters, Silhouette score 0.3842, standardized inputs", table_cell), Paragraph("4 Tests", table_cell), Paragraph("<b>100% PASS</b>", table_cell)],
-        [Paragraph("7. 2D PCA Projection", table_cell), Paragraph("69.7% PC1, 14.1% PC2, 83.8% cumulative variance", table_cell), Paragraph("4 Tests", table_cell), Paragraph("<b>100% PASS</b>", table_cell)],
-        [Paragraph("8. STRIPS Calculus & Frame", table_cell), Paragraph("Preconditions, Add/Del effects, Frame Problem persistence", table_cell), Paragraph("3 Tests", table_cell), Paragraph("<b>100% PASS</b>", table_cell)],
-        [Paragraph("9. HTN Task Decomposition", table_cell), Paragraph("5 compound goals, goal differentiation, action specificity", table_cell), Paragraph("4 Tests", table_cell), Paragraph("<b>100% PASS</b>", table_cell)],
-        [Paragraph("10. Canonical REST Endpoints", table_cell), Paragraph("FastAPI testclient execution for all 11 endpoints", table_cell), Paragraph("1 Test (11/11)", table_cell), Paragraph("<b>100% PASS</b>", table_cell)],
-        [Paragraph("11. Recommendation Engine", table_cell), Paragraph("Rule-based surveillance flags across 4 heuristic rules", table_cell), Paragraph("4 Tests", table_cell), Paragraph("<b>100% PASS</b>", table_cell)],
-        [Paragraph("12. Report Generation", table_cell), Paragraph("JSON compilation, Markdown compilation, HTML generation", table_cell), Paragraph("3 Tests", table_cell), Paragraph("<b>100% PASS</b>", table_cell)],
-    ]
-    test_res_table = Table(test_res_data, colWidths=[120, 210, 90, 80])
-    test_res_table.setStyle(TableStyle([
+    test_table = Table([
+        [Paragraph("<b>Test Section</b>", table_cell_bold), Paragraph("<b>Verification Objective</b>", table_cell_bold), Paragraph("<b>Count</b>", table_cell_bold), Paragraph("<b>Result</b>", table_cell_bold)],
+        [Paragraph("1. Excel Loading & Schema", table_cell), Paragraph("S9, S10, S11 multi-row headers, columns, raw records", table_cell), Paragraph("4 Tests", table_cell), Paragraph("<b>PASS (100%)</b>", table_cell)],
+        [Paragraph("2. Data Cleaning & Bounds", table_cell), Paragraph("Footnote filtering, 95% UI retention, demographic isolation", table_cell), Paragraph("7 Tests", table_cell), Paragraph("<b>PASS (100%)</b>", table_cell)],
+        [Paragraph("3. Empirical HLE Calculations", table_cell), Paragraph("1990, 2010, 2020, 2023 values validated against original Excel", table_cell), Paragraph("7 Tests", table_cell), Paragraph("<b>PASS (100%)</b>", table_cell)],
+        [Paragraph("4. Gender Gap Disparities", table_cell), Paragraph("Female-Male delta, Ukraine max (+7.9y), Balochistan min", table_cell), Paragraph("6 Tests", table_cell), Paragraph("<b>PASS (100%)</b>", table_cell)],
+        [Paragraph("5. Regional & SDI Analytics", table_cell), Paragraph("High vs Low SDI 11.0y span, Super-Region trends", table_cell), Paragraph("3 Tests", table_cell), Paragraph("<b>PASS (100%)</b>", table_cell)],
+        [Paragraph("6. K-Means & 2D PCA", table_cell), Paragraph("k=3, Silhouette 0.3842, PC1 (69.7%) + PC2 (14.1%) = 83.8%", table_cell), Paragraph("8 Tests", table_cell), Paragraph("<b>PASS (100%)</b>", table_cell)],
+        [Paragraph("7. STRIPS & HTN Planning", table_cell), Paragraph("Preconditions, Add/Del effects, Frame Problem, 5 compound goals", table_cell), Paragraph("7 Tests", table_cell), Paragraph("<b>PASS (100%)</b>", table_cell)],
+        [Paragraph("8. REST API & Reports", table_cell), Paragraph("11 FastAPI endpoints 200 OK, JSON/MD report compilers", table_cell), Paragraph("8 Tests", table_cell), Paragraph("<b>PASS (100%)</b>", table_cell)],
+    ], colWidths=[120, 230, 60, 90])
+    test_table.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), c_primary),
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#CBD5E1")),
         ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor("#F8FAFC")]),
-        ('TOPPADDING', (0,0), (-1,-1), 3),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 3),
+        ('TOPPADDING', (0,0), (-1,-1), 2.5),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 2.5),
     ]))
-    story.append(test_res_table)
+    story.append(test_table)
     story.append(PageBreak())
 
     # =========================================================================
-    # CHAPTER 8: CONCLUSION & LIMITATIONS
+    # PAGE 8: CHAPTER 6: CONCLUSION & VIVA VOCE DEFENSE GUIDE
     # =========================================================================
-    story.append(Paragraph("CHAPTER 8: CONCLUSION, LIMITATIONS & FUTURE SCOPE", h1_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=12, spaceBefore=2))
+    story.append(Paragraph("CHAPTER 6: CONCLUSION, LIMITATIONS & VIVA VOCE DEFENSE", h1_style))
+    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=5, spaceBefore=2))
 
-    story.append(Paragraph("8.1 Summary of Contributions", h2_style))
+    story.append(Paragraph("6.1 Project Conclusion & Achievements", h2_style))
     story.append(Paragraph(
-        "This project successfully designed, implemented, and validated a comprehensive full-stack intelligence system for analyzing global health inequalities. The key achievements include:",
-        body_style
-    ))
-    story.append(Paragraph("1. <b>Empirical Fidelity:</b> 100% empirical derivation from official GBD 2023 Excel records with preserved uncertainty bounds and zero synthetic figures.", bullet_style))
-    story.append(Paragraph("2. <b>Machine Learning Integration:</b> Unsupervised K-Means clustering ($k=3$) and 2D PCA projecting 83.8% of feature variance for intuitive inequality grouping.", bullet_style))
-    story.append(Paragraph("3. <b>Classical AI Planning:</b> Dynamic workflow orchestration leveraging STRIPS state calculus and HTN task decomposition that formally solves the classical Frame Problem.", bullet_style))
-    story.append(Paragraph("4. <b>Modular Architecture:</b> Seamless integration between a robust FastAPI backend and an interactive React 18 / Tailwind CSS dashboard.", bullet_style))
-
-    story.append(Paragraph("8.2 Methodological & Dataset Limitations", h2_style))
-    story.append(Paragraph(
-        "In keeping with academic honesty, the following limitations must be noted:",
-        body_style
-    ))
-    story.append(Paragraph("• <b>Observational Nature (No Causality):</b> The system uncovers statistical associations, disparities, and developmental gradients. It does not establish causal physiological or socio-political mechanisms.", bullet_style))
-    story.append(Paragraph("• <b>Discrete Temporal Intervals:</b> Longitudinal metrics reflect specific benchmark years (1990, 2010, 2020, 2023) as provided by GBD publications, omitting intermediate annualized fluctuations.", bullet_style))
-    story.append(Paragraph("• <b>Non-Clinical Scope:</b> All outputs serve epidemiological research, educational demonstration, and high-level policy screening; the system does not provide individualized clinical diagnoses.", bullet_style))
-
-    story.append(Paragraph("8.3 Future Enhancements", h2_style))
-    story.append(Paragraph(
-        "Promising avenues for future expansion include incorporating sub-national GIS geospatial mapping layers (e.g. state/provincial boundaries), integrating automated LLM narrative explanations grounded strictly on the STRIPS state log, and implementing time-series autoregressive forecasting (ARIMA / Prophet) for 2030 healthy life expectancy projections.",
-        body_style
-    ))
-    story.append(PageBreak())
-
-    # =========================================================================
-    # APPENDIX: VIVA VOCE QUESTIONS & ANSWERS
-    # =========================================================================
-    story.append(Paragraph("APPENDIX A: VIVA VOCE DEFENSE PREPARATION (Q & A)", h1_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=12, spaceBefore=2))
-
-    story.append(Paragraph("<b>Q1. What is the fundamental difference between Life Expectancy (LE) and Healthy Life Expectancy (HLE)?</b>", h2_style))
-    story.append(Paragraph(
-        "<b>Answer:</b> Life Expectancy (LE) measures the total average quantity of years an individual is expected to live from birth. In contrast, Healthy Life Expectancy (HLE) estimates the average number of years lived in 'full health', subtracting time spent in states of poor health, chronic disability, or non-fatal illness. HLE thus reflects the quality of survival, not merely its duration.",
+        "The project successfully realized a production-grade health inequality intelligence system integrating: (1) 100% empirical derivation from official GBD 2023 records; (2) Unsupervised clustering ($k=3$) and 2D PCA (83.8% variance); (3) Dynamic AI planning combining HTN goal decomposition and STRIPS state transitions; and (4) Verified full-stack integration with 50/50 automated test compliance.",
         body_style
     ))
 
-    story.append(Paragraph("<b>Q2. What is the Frame Problem in AI, and how does your system resolve it?</b>", h2_style))
+    story.append(Paragraph("6.2 Limitations & Methodological Boundaries", h2_style))
     story.append(Paragraph(
-        "<b>Answer:</b> The Frame Problem in AI logic addresses the challenge of specifying which facts in a world state remain unchanged after an action occurs, without requiring an infinite number of non-change axioms. Our system uses the formal STRIPS assumption: actions define explicit `Add` and `Delete` lists. Any predicate fact in the current state not present in the action's `Delete` list is guaranteed to persist untouched into the subsequent state.",
+        "• <b>Observational Association:</b> The system models statistical disparities and developmental gradients; it does not assert biological or sociopolitical causality.<br/>"
+        "• <b>Discrete Temporal Intervals:</b> Longitudinal metrics correspond to official benchmark years (1990, 2010, 2020, 2023), omitting annual fluctuations.<br/>"
+        "• <b>Non-Clinical Purpose:</b> Intended for public health policy modeling and research screening, not individualized clinical diagnoses.",
         body_style
     ))
 
-    story.append(Paragraph("<b>Q3. Why did you choose k=3 for K-Means clustering, and what does the Silhouette Score signify?</b>", h2_style))
+    story.append(Paragraph("6.3 Viva Voce Defense Guide (Top 4 Technical Q&As)", h2_style))
+
+    story.append(Paragraph("<b>Q1. What is the fundamental difference between Life Expectancy (LE) and Healthy Life Expectancy (HLE)?</b>", ParagraphStyle('Q1', parent=body_style, fontName='Helvetica-Bold', textColor=c_primary)))
     story.append(Paragraph(
-        "<b>Answer:</b> Candidate values from $k=2$ to $k=6$ were evaluated. A choice of $k=3$ produced an optimal Silhouette Score of 0.3842 while yielding three highly distinct and clinically meaningful archetypes: (0) High-Development Resilient (Mean HLE 67.4 yrs), (1) Transitional Double Burden (Mean HLE 62.5 yrs), and (2) Low-Development High-Vulnerability (Mean HLE 53.1 yrs). The Silhouette Score measures how similar a location is to its own cluster compared to neighboring clusters.",
+        "<b>Answer:</b> Life Expectancy (LE) measures the total average years an individual is expected to live from birth. Healthy Life Expectancy (HLE) estimates the years lived in 'full health' by subtracting years lost to chronic illness, functional impairment, and disability. HLE reflects survival quality rather than gross duration.",
         body_style
     ))
 
-    story.append(Paragraph("<b>Q4. Why did you not join the global disease burden datasets (S10/S11) directly to country-level rows in S9?</b>", h2_style))
+    story.append(Paragraph("<b>Q2. What is the Frame Problem in AI, and how does your system resolve it?</b>", ParagraphStyle('Q2', parent=body_style, fontName='Helvetica-Bold', textColor=c_primary)))
     story.append(Paragraph(
-        "<b>Answer:</b> Datasets S10 (DALYs) and S11 (YLDs) represent global aggregate cause-of-death and disability rates across the entire planet. Dataset S9 contains location-disaggregated healthy life expectancy tables. Joining global cause distributions to individual countries would commit an ecological fallacy—falsely assuming that a global cause distribution applies equally to a specific nation.",
+        "<b>Answer:</b> The Frame Problem concerns specifying which world facts remain unchanged following an action without writing endless non-change axioms. Our system solves it via the STRIPS assumption: $S_{t+1} = (S_t \\setminus Del(a)) \\cup Add(a)$. Facts in $S_t$ not explicitly in $Del(a)$ automatically persist into $S_{t+1}$.",
         body_style
     ))
 
-    story.append(Paragraph("<b>Q5. What role does Principal Component Analysis (PCA) play in your system?</b>", h2_style))
+    story.append(Paragraph("<b>Q3. Why was k=3 selected for K-Means clustering, and what does the Silhouette Score indicate?</b>", ParagraphStyle('Q3', parent=body_style, fontName='Helvetica-Bold', textColor=c_primary)))
     story.append(Paragraph(
-        "<b>Answer:</b> Each location is characterized by four standardized features: 2023 HLE, 1990–2023 absolute change, 2023 gender gap, and 2010–2023 percentage change. Because 4D spaces cannot be rendered directly, PCA computes eigenvectors of the covariance matrix. The first two principal components capture 83.8% of the total variance (69.7% for PC1, 14.1% for PC2), enabling reliable 2D visualization with minimal information loss.",
+        "<b>Answer:</b> Candidate values from $k=2$ to $k=6$ were tested. $k=3$ produced an optimal Silhouette Score of 0.3842 while separating locations into three clinically interpretable archetypes: High-Development Resilient (Mean HLE 67.4y), Transitional Double Burden (62.5y), and Low-Development Vulnerable (53.1y).",
+        body_style
+    ))
+
+    story.append(Paragraph("<b>Q4. Why did you not merge the global disease burden datasets (S10/S11) into country-level rows in S9?</b>", ParagraphStyle('Q4', parent=body_style, fontName='Helvetica-Bold', textColor=c_primary)))
+    story.append(Paragraph(
+        "<b>Answer:</b> Datasets S10 (DALYs) and S11 (YLDs) record global aggregate cause rates. Merging global causes directly into country-level S9 tables would commit an ecological fallacy—falsely attributing global cause-of-death proportions to specific national populations.",
         body_style
     ))
 
