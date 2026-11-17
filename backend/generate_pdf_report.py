@@ -72,7 +72,7 @@ class NumberedCanvas(canvas.Canvas):
         )
         self.drawRightString(
             letter[0] - 54, letter[1] - 34,
-            "Major Project Report · B.Tech CSE"
+            "Major Project Report · B.Tech CSDA (NSUT)"
         )
         self.setStrokeColor(colors.HexColor("#CBD5E1"))
         self.setLineWidth(0.6)
@@ -84,7 +84,7 @@ class NumberedCanvas(canvas.Canvas):
         self.drawRightString(letter[0] - 54, 30, page_str)
         self.drawString(
             54, 30,
-            "Dept. of Computer Science & Engineering · Team: Gaurav, BalKrishna, Yash Kumar · Guide: Prof. Prakash Rao"
+            "Netaji Subhas University of Technology (NSUT) · CSDA · Team: Gaurav, BalKrishna, Yash Kumar · Guide: Prof. Prakash Rao"
         )
         self.restoreState()
 
@@ -216,10 +216,10 @@ def build_pdf_report(output_filename="Health_Inequality_Intelligence_System_Proj
     story.append(HRFlowable(width="65%", thickness=2, color=c_secondary, spaceAfter=12, spaceBefore=0))
     story.append(Paragraph("An Automated Public Health Analytics Platform Integrating Global Burden of Disease Empirical Data, Scikit-Learn Unsupervised Clustering, and HTN / STRIPS AI Planning Calculus", subtitle_style))
 
-    story.append(Spacer(1, 45))
+    story.append(Spacer(1, 35))
 
     meta_table = Table([
-        [Paragraph("<b>Submitted In Partial Fulfillment of Requirements for the Award of the Degree of</b><br/><b>BACHELOR OF TECHNOLOGY</b><br/>IN<br/><b>COMPUTER SCIENCE & ENGINEERING</b>", cover_meta_style)]
+        [Paragraph("<b>Submitted In Partial Fulfillment of Requirements for the Award of the Degree of</b><br/><b>BACHELOR OF TECHNOLOGY</b><br/>IN<br/><b>COMPUTER SCIENCE & ENGINEERING</b><br/><b>(SPECIALIZATION IN BIG DATA ANALYTICS — CSDA)</b>", cover_meta_style)]
     ], colWidths=[500])
     meta_table.setStyle(TableStyle([
         ('ALIGN', (0,0), (-1,-1), 'CENTER'),
@@ -227,7 +227,7 @@ def build_pdf_report(output_filename="Health_Inequality_Intelligence_System_Proj
     ]))
     story.append(meta_table)
 
-    story.append(Spacer(1, 45))
+    story.append(Spacer(1, 35))
 
     team_guide_data = [
         [
@@ -236,14 +236,14 @@ def build_pdf_report(output_filename="Health_Inequality_Intelligence_System_Proj
                 "• <b>Gaurav</b> (Roll No: 2024UCB6625)<br/>"
                 "• <b>BalKrishna</b> (Roll No: 2024UCB6068)<br/>"
                 "• <b>Yash Kumar</b> (Roll No: 2024UCB8025)<br/><br/>"
-                "B.Tech Computer Science & Engineering",
+                "<b>B.Tech CSE (Big Data Analytics — CSDA)</b>",
                 ParagraphStyle('LeftMeta', parent=cover_meta_style, alignment=TA_LEFT)
             ),
             Paragraph(
                 "<b>Under the Supervision of:</b><br/><br/>"
                 "<b>Professor Prakash Rao</b><br/>"
                 "Department of Computer Science & Engineering<br/>"
-                "School of Engineering & Technology<br/><br/>"
+                "<b>Netaji Subhas University of Technology (NSUT)</b><br/><br/>"
                 "Academic Session: 2026–2027",
                 ParagraphStyle('RightMeta', parent=cover_meta_style, alignment=TA_RIGHT)
             ),
@@ -257,8 +257,8 @@ def build_pdf_report(output_filename="Health_Inequality_Intelligence_System_Proj
     ]))
     story.append(team_guide_table)
 
-    story.append(Spacer(1, 50))
-    story.append(Paragraph("<b>DEPARTMENT OF COMPUTER SCIENCE & ENGINEERING</b><br/>School of Engineering & Technology<br/>Academic Session 2026–2027", cover_meta_style))
+    story.append(Spacer(1, 40))
+    story.append(Paragraph("<b>DEPARTMENT OF COMPUTER SCIENCE & ENGINEERING</b><br/><b>NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY (NSUT)</b><br/>Sector 3, Dwarka, New Delhi – 110078<br/>Academic Session 2026–2027", cover_meta_style))
     story.append(PageBreak())
 
     # =========================================================================
@@ -267,44 +267,44 @@ def build_pdf_report(output_filename="Health_Inequality_Intelligence_System_Proj
     story.append(Paragraph("CERTIFICATE OF AUTHENTICITY", h1_style))
     story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=8, spaceBefore=2))
     story.append(Paragraph(
-        "This is to certify that the project entitled <b>'AI-Based Regional Health Inequality and Life Expectancy Intelligence System'</b> submitted by <b>Gaurav</b> (2024UCB6625), <b>BalKrishna</b> (2024UCB6068), and <b>Yash Kumar</b> (2024UCB8025) in partial fulfillment of the requirements for the award of the degree of <b>Bachelor of Technology in Computer Science & Engineering</b> is an authentic record of original project work carried out under my guidance and supervision.",
+        "This is to certify that the project entitled <b>'AI-Based Regional Health Inequality and Life Expectancy Intelligence System'</b> submitted by <b>Gaurav</b> (2024UCB6625), <b>BalKrishna</b> (2024UCB6068), and <b>Yash Kumar</b> (2024UCB8025) in partial fulfillment of the requirements for the award of the degree of <b>Bachelor of Technology in Computer Science & Engineering (Specialization in Big Data Analytics — CSDA)</b> at <b>Netaji Subhas University of Technology (NSUT), New Delhi</b> is an authentic record of original project work carried out under my guidance and supervision.",
         body_style
     ))
     story.append(Paragraph(
         "The mathematical computations, data science pipelines, Scikit-learn machine learning algorithms, and automated HTN / STRIPS planning architectures embodied in this report have been verified against original empirical records from the Global Burden of Disease (GBD) Study and have not been submitted elsewhere for any other degree or diploma.",
         body_style
     ))
-    story.append(Spacer(1, 25))
+    story.append(Spacer(1, 20))
 
     cert_sig_table = Table([
         [
-            Paragraph("<b>Professor Prakash Rao</b><br/>Project Supervisor / Guide<br/>Dept. of Computer Science & Engg.", ParagraphStyle('Sig1', parent=body_style, alignment=TA_LEFT)),
-            Paragraph("<b>Head of Department</b><br/>Dept. of Computer Science & Engg.<br/>School of Engineering & Technology", ParagraphStyle('Sig2', parent=body_style, alignment=TA_CENTER)),
-            Paragraph("<b>External Examiner</b><br/>Board of Examiners<br/>University Evaluation Committee", ParagraphStyle('Sig3', parent=body_style, alignment=TA_RIGHT)),
+            Paragraph("<b>Professor Prakash Rao</b><br/>Project Supervisor / Guide<br/>Dept. of CSE, NSUT", ParagraphStyle('Sig1', parent=body_style, alignment=TA_LEFT)),
+            Paragraph("<b>Head of Department</b><br/>Dept. of Computer Science & Engg.<br/>Netaji Subhas University of Tech.", ParagraphStyle('Sig2', parent=body_style, alignment=TA_CENTER)),
+            Paragraph("<b>External Examiner</b><br/>Board of Examiners<br/>NSUT Evaluation Committee", ParagraphStyle('Sig3', parent=body_style, alignment=TA_RIGHT)),
         ]
     ], colWidths=[175, 175, 150])
     story.append(cert_sig_table)
 
-    story.append(Spacer(1, 20))
+    story.append(Spacer(1, 15))
     story.append(Paragraph("CANDIDATE DECLARATION", h1_style))
     story.append(HRFlowable(width="100%", thickness=1, color=c_secondary, spaceAfter=8, spaceBefore=2))
     story.append(Paragraph(
-        "We hereby declare that the project entitled <b>'AI-Based Regional Health Inequality and Life Expectancy Intelligence System'</b> is an outcome of our own collaborative technical development. All sources of empirical health datasets (GBD Study 2023), theoretical paradigms (STRIPS Action Representation, HTN Planning), algorithms, and software libraries (FastAPI, React 18, Scikit-learn) have been appropriately referenced. No fabricated, artificial, or synthetic data records were used.",
+        "We hereby declare that the project entitled <b>'AI-Based Regional Health Inequality and Life Expectancy Intelligence System'</b> is an outcome of our own collaborative technical development in the <b>Department of Computer Science & Engineering (CSDA), Netaji Subhas University of Technology (NSUT)</b>. All sources of empirical health datasets (GBD Study 2023), theoretical paradigms (STRIPS Action Representation, HTN Planning), algorithms, and software libraries (FastAPI, React 18, Scikit-learn) have been appropriately referenced. No fabricated, artificial, or synthetic data records were used.",
         body_style
     ))
-    story.append(Spacer(1, 20))
+    story.append(Spacer(1, 15))
 
     cand_table = Table([
         [
-            Paragraph("<b>Gaurav</b><br/>2024UCB6625<br/>B.Tech CSE", ParagraphStyle('Cand1', parent=body_style, alignment=TA_LEFT)),
-            Paragraph("<b>BalKrishna</b><br/>2024UCB6068<br/>B.Tech CSE", ParagraphStyle('Cand2', parent=body_style, alignment=TA_CENTER)),
-            Paragraph("<b>Yash Kumar</b><br/>2024UCB8025<br/>B.Tech CSE", ParagraphStyle('Cand3', parent=body_style, alignment=TA_RIGHT)),
+            Paragraph("<b>Gaurav</b><br/>2024UCB6625<br/>B.Tech CSDA, NSUT", ParagraphStyle('Cand1', parent=body_style, alignment=TA_LEFT)),
+            Paragraph("<b>BalKrishna</b><br/>2024UCB6068<br/>B.Tech CSDA, NSUT", ParagraphStyle('Cand2', parent=body_style, alignment=TA_CENTER)),
+            Paragraph("<b>Yash Kumar</b><br/>2024UCB8025<br/>B.Tech CSDA, NSUT", ParagraphStyle('Cand3', parent=body_style, alignment=TA_RIGHT)),
         ]
     ], colWidths=[175, 175, 150])
     story.append(cand_table)
 
-    story.append(Spacer(1, 15))
-    story.append(Paragraph("<b>Place:</b> University Campus &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Date:</b> November 17, 2026", body_style))
+    story.append(Spacer(1, 12))
+    story.append(Paragraph("<b>Place:</b> NSUT, Dwarka, New Delhi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Date:</b> November 17, 2026", body_style))
     story.append(PageBreak())
 
     # =========================================================================

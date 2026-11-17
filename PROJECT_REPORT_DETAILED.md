@@ -3,7 +3,9 @@
 # AI-Based Regional Health Inequality and Life Expectancy Intelligence System
 
 **Degree:** Bachelor of Technology (B.Tech) in Computer Science & Engineering  
-**Department:** Department of Computer Science & Engineering, School of Engineering & Technology  
+**Specialization:** Big Data Analytics (CSDA)  
+**Institution:** Netaji Subhas University of Technology (NSUT), Dwarka, New Delhi  
+**Department:** Department of Computer Science & Engineering  
 **Academic Year:** 2026–2027  
 **Project Team Members:**
 - **Gaurav** (Roll No: 2024UCB6625)
@@ -11,7 +13,7 @@
 - **Yash Kumar** (Roll No: 2024UCB8025)
 
 **Project Supervisor / Guide:**
-- **Professor Prakash Rao**, Department of Computer Science & Engineering  
+- **Professor Prakash Rao**, Department of Computer Science & Engineering, NSUT  
 
 **Project Status:** 100% Operational, Verified & Validated (50/50 Tests Passed)  
 
